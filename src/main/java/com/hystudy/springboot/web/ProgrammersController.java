@@ -1,6 +1,7 @@
 package com.hystudy.springboot.web;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class ProgrammersController {
 	// Lv.1 신고 결과 받기
@@ -8,7 +9,7 @@ public class ProgrammersController {
         int[] answer = new int[id_list.length];
         
         Map<String,Integer> repomap = new HashMap<String,Integer>(); // 신고 당한 횟수
-        Map<String,List<String>> repomapList = new HashMap<String,List<String>>(); // 신고 기록
+        Map<String, List<String>> repomapList = new HashMap<String,List<String>>(); // 신고 기록
         Arrays.asList(id_list).forEach(id -> {
         	repomap.put(id,0);
         	repomapList.put(id,new ArrayList<String>());
@@ -105,5 +106,28 @@ public class ProgrammersController {
 			}
 		}
 		return result;
+	}
+
+	public int[] solution_failureRate(int N, int[] stages) {
+		int[] answer = new int[N];
+		// stage, failureRage map create
+		HashMap<Integer,Double> failRate = new HashMap<Integer,Double>();
+		// 스테이지에 도달했으나 아직 클리어하지 못한 플레이어의 수 / 스테이지에 도달한 플레이어 수
+		for(int i=1; i <= answer.length;i++){ // 각 스테이지
+			// 스테이지 도달 플레이어 수
+			int reachCnt = 0;
+			int clearCnt = 0;
+			for(int stage : stages){
+				if(stage == i) reachCnt++;
+				if(stage > i) clearCnt++;
+			}
+			failRate.put(i,Double.valueOf((double)reachCnt/(reachCnt+clearCnt)));
+		}
+		answer = failRate.entrySet().stream()
+			.sorted(Map.Entry.<Integer,Double>comparingByValue().reversed()
+					.thenComparing(Map.Entry.comparingByKey()))
+			.mapToInt(Map.Entry::getKey).toArray();
+
+		return answer;
 	}
 }

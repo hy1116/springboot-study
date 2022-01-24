@@ -40,4 +40,12 @@ public class ProgrammersControllerTest {
 		assertThat(pc.solution_keypadPress(new int[] {7, 0, 8, 2, 8, 3, 1, 5, 7, 6, 2},"left")).isEqualTo("LRLLRRLLLRR");
 		assertThat(pc.solution_keypadPress(new int[] {1, 2, 3, 4, 5, 6, 7, 8, 9, 0},"right")).isEqualTo("LLRLLRLLRL");
 	}
+
+	@Test
+	public  void solution_failureRate_test(){
+		ProgrammersController pc = new ProgrammersController();
+
+		assertThat(pc.solution_failureRate(5,new int[]{2, 1, 2, 6, 2, 4, 3, 3})).isEqualTo(new int[]{3, 4, 2, 1, 5});
+		assertThat(pc.solution_failureRate(4,new int[]{4, 4, 4, 4, 4})).isEqualTo(new int[]{4, 1, 2, 3});
+	}
 }
