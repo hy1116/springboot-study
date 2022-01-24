@@ -1,13 +1,13 @@
 package com.hystudy.springboot.web;
 
 import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class ProgrammersController {
 	// Lv.1 신고 결과 받기
-	public int[] solution_RepostResult(String[] id_list, String[] report, int k) {
-        int[] answer = new int[id_list.length];
-        
+	public static int[] solution_RepostResult(String[] id_list, String[] report, int k) {
         Map<String,Integer> repomap = new HashMap<String,Integer>(); // 신고 당한 횟수
         Map<String, List<String>> repomapList = new HashMap<String,List<String>>(); // 신고 기록
         Arrays.asList(id_list).forEach(id -> {
@@ -20,19 +20,12 @@ public class ProgrammersController {
         		String[] repo = r.split(" ");
         		repomap.put(repo[1], repomap.get(repo[1]) + 1); // 신고당한사람 카운트
         		repomapList.get(repo[0]).add(repo[1]); // 신고기록 추가
-        	});
-        
-        for(int i =0; i<id_list.length;i++){ // 유저별 확인
-        	answer[i] = 0;
-        	for(String repo : repomapList.get(id_list[i])){ // 신고기록 가져오기
-        		if(repomap.get(repo) >= k) answer[i]++; // 신고한사람 기준보다 높으면 카운트
-        	}
-        }
-        return answer;
+    	});
+        return IntStream.range(0, id_list.length).boxed().mapToInt(i -> (int)repomapList.get(id_list[i]).stream().filter(a -> repomap.get(a) >= k).count()).toArray();
     }
 	
 	// LV.2 문자열 압축
-	public int solution_TextCompression(String s) {
+	public static int solution_TextCompression(String s) {
 		int answer = s.length();
         for(int i = 1; i <= Math.floor(s.length()/2); i++){  // 문자 단위
         	int cnt = 0, eqcnt = 0; // 반복 횟수, 같은문자 카운트
@@ -55,7 +48,7 @@ public class ProgrammersController {
     }
 	
 	// LV.1 키패드 누르기
-	public String solution_keypadPress(int[] numbers, String hand) {
+	public static String solution_keypadPress(int[] numbers, String hand) {
         String answer = "";
        
         int[] left_current = {3,0}, right_current = {3,2}; // 왼손, 오른손 현재위치
@@ -71,14 +64,8 @@ public class ProgrammersController {
         		break;
         	case 2: case 5: case 8: case 0:
         		int[] curr_loca = clac_curr_location(num);
-        		
-        		int left_distinct = 0;
-        		left_distinct += Math.abs(curr_loca[0] - left_current[0]);
-        		left_distinct += Math.abs(curr_loca[1] - left_current[1]);
-        		
-				int right_distinct = 0;
-				right_distinct += Math.abs(curr_loca[0] - right_current[0]);
-				right_distinct += Math.abs(curr_loca[1] - right_current[1]);
+        		int left_distinct = Math.abs(curr_loca[0] - left_current[0]) + Math.abs(curr_loca[1] - left_current[1]);
+        		int right_distinct = Math.abs(curr_loca[0] - right_current[0]) + Math.abs(curr_loca[1] - right_current[1]);
         		
 				if(left_distinct < right_distinct || (left_distinct == right_distinct) &&"left".equals(hand)) {
 					answer += "L";
@@ -94,8 +81,7 @@ public class ProgrammersController {
         
         return answer;
     }
-	
-	public int[] clac_curr_location(int num) { // 키패드 위치 계산
+	public static int[] clac_curr_location(int num) { // 키패드 위치 계산
 		String[][] keypads = {{"1","2","3"},{"4","5","6"},{"7","8","9"},{"*","0","#"}}; // 2차원 키패드 배열
         
 		int[] result = {0,0};
@@ -108,26 +94,42 @@ public class ProgrammersController {
 		return result;
 	}
 
-	public int[] solution_failureRate(int N, int[] stages) {
-		int[] answer = new int[N];
-		// stage, failureRage map create
-		HashMap<Integer,Double> failRate = new HashMap<Integer,Double>();
-		// 스테이지에 도달했으나 아직 클리어하지 못한 플레이어의 수 / 스테이지에 도달한 플레이어 수
-		for(int i=1; i <= answer.length;i++){ // 각 스테이지
-			// 스테이지 도달 플레이어 수
-			int reachCnt = 0;
-			int clearCnt = 0;
-			for(int stage : stages){
-				if(stage == i) reachCnt++;
-				if(stage > i) clearCnt++;
-			}
-			failRate.put(i,Double.valueOf((double)reachCnt/(reachCnt+clearCnt)));
-		}
-		answer = failRate.entrySet().stream()
-			.sorted(Map.Entry.<Integer,Double>comparingByValue().reversed()
+	// LV1. 실패율
+	public static int[] solution_failureRate(int N, int[] stages) {
+		return IntStream.range(1,N+1).boxed()
+			.collect(Collectors.toMap(Function.identity(), i -> 
+				(Arrays.stream(stages).filter(s2 -> s2 >= i).count() > 0) ? 
+						(float)Arrays.stream(stages).filter(s1 -> s1 == i).count() / Arrays.stream(stages).filter(s2 -> s2 >= i).count():(float)0))
+			.entrySet().stream().sorted(Map.Entry.<Integer,Float>comparingByValue().reversed()
 					.thenComparing(Map.Entry.comparingByKey()))
 			.mapToInt(Map.Entry::getKey).toArray();
-
-		return answer;
 	}
+	
+	// LV.1 [1차] 비밀지도
+	public static String[] solution_secretMap(int n, int[] arr1, int[] arr2) {
+        String[] answer = new String[n];
+        
+        String[] str_arr1 = Arrays.stream(arr1).boxed()
+        		.map(a -> String.format("%0"+n+"d", Long.parseLong(Long.toBinaryString(a))))
+        		.toArray(String[]::new);
+        String[] str_arr2 = Arrays.stream(arr2).boxed()
+        		.map(a -> String.format("%0"+n+"d", Long.parseLong(Long.toBinaryString(a))))
+        		.toArray(String[]::new);
+        
+        IntStream.range(0,n).forEach(i-> {
+        	answer[i] = "";
+			IntStream.range(0,n).forEach((j) ->{
+	    		if('0'==(str_arr1[i].charAt(j)) && '0'==(str_arr2[i].charAt(j))) answer[i] += ' ';
+	    		else answer[i] += '#';
+			});
+        });
+        
+        return answer;
+    }
+	
+	// LV.1 [1차] 다트게임
+	public static int solution_DartGame(String dartResult) {
+        int answer = 0;
+        return answer;
+    }
 }
