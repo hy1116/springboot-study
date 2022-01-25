@@ -32,7 +32,7 @@ dependencies {
 
 }
 
-group 'com.hystudy'
+group 'com.hystudy.springboot'
 version '1.0-SNAPSHOT'
 
 test {
