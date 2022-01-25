@@ -2,6 +2,7 @@ package com.hystudy.springboot.web;
 
 import java.util.*;
 import java.util.function.Function;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -130,6 +131,39 @@ public class ProgrammersController {
 	// LV.1 [1차] 다트게임
 	public static int solution_DartGame(String dartResult) {
         int answer = 0;
+        return answer;
+    }
+	
+	// LV.1 x만큼 간격이 있는 n개의 숫자
+	public static long[] solution_xn(int x, int n) {
+        long[] answer = new long[n];
+        
+        int cnt = 0;
+        while(cnt++ < n) answer[cnt] = x*cnt;
+        
+        return answer;
+    }
+	
+	// LV.2 더 맵게
+	public static int solution_moreSpicy(int[] scoville, int K) {
+		int answer = 0;
+		PriorityQueue<Integer> heap = Arrays.stream(scoville).boxed()
+				.collect(Collectors.toCollection(PriorityQueue::new));
+		while(heap.peek() < K) {
+			if(heap.size()==1) return -1;
+			heap.add(heap.poll()+(heap.poll()*2));
+			answer++;
+		}
+		
+		return answer>0?answer:-1;
+    }
+	
+	// LV2. 오픈채팅방
+	public static String[] solution_openKaKao(String[] record) {
+        String[] answer = {};
+        
+        List<String> temp = Arrays.asList(record);
+        
         return answer;
     }
 }

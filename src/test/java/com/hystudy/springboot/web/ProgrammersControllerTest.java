@@ -56,6 +56,19 @@ public class ProgrammersControllerTest {
 		assertThat(ProgrammersController.solution_DartGame("1D#2S*3S")).isEqualTo(5);
 		assertThat(ProgrammersController.solution_DartGame("1T2D3D#")).isEqualTo(-4);
 		assertThat(ProgrammersController.solution_DartGame("1D2S3T*")).isEqualTo(59);
-		
+	}
+	
+	@Test
+	public void solution_moreSpicy_test() { // 비밀지도
+		assertThat(ProgrammersController.solution_moreSpicy(new int[] {12, 1, 2, 3, 9, 10},7)).isEqualTo(2);
+		assertThat(ProgrammersController.solution_moreSpicy(new int[] {1, 2, 9, 12, 10, 13},10)).isEqualTo(2);
+		assertThat(ProgrammersController.solution_moreSpicy(new int[] {1, 2, 9, 12, 10, 13},160)).isEqualTo(-1);
+		assertThat(ProgrammersController.solution_moreSpicy(new int[] {1, 2, 3, 4, 5, 6, 7},5)).isEqualTo(2);
+	}
+	
+	@Test
+	public void solution_openKaKao_test() { // 비밀지도
+		assertThat(ProgrammersController.solution_openKaKao(new String[] {"Enter uid1234 Muzi", "Enter uid4567 Prodo", "Leave uid1234", "Enter uid1234 Prodo", "Change uid4567 Ryan"}))
+		.isEqualTo(new String[] {"Prodo님이 들어왔습니다.", "Ryan님이 들어왔습니다.", "Prodo님이 나갔습니다.", "Prodo님이 들어왔습니다."});
 	}
 }
