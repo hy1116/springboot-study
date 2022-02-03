@@ -3,6 +3,7 @@ package com.hystudy.springboot.web;
 import java.util.*;
 import java.util.function.Function;
 import java.util.function.Supplier;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -128,12 +129,6 @@ public class ProgrammersController {
         return answer;
     }
 	
-	// LV.1 [1차] 다트게임
-	public static int solution_DartGame(String dartResult) {
-        int answer = 0;
-        return answer;
-    }
-	
 	// LV.1 x만큼 간격이 있는 n개의 숫자
 	public static long[] solution_xn(int x, int n) {
         long[] answer = new long[n];
@@ -160,10 +155,73 @@ public class ProgrammersController {
 	
 	// LV2. 오픈채팅방
 	public static String[] solution_openKaKao(String[] record) {
-        String[] answer = {};
+		Map<String,String> usermap = new HashMap<>();
+		List<String> answer = new ArrayList<>();
+        for(String str : record) {
+        	String[] temparr = str.split(" ");
+        	if("Enter".equals(temparr[0])) {
+        		usermap.put(temparr[1], temparr[2]);
+        		answer.add(temparr[1]+"/님이 들어왔습니다.");
+        	} else if("Leave".equals(temparr[0])) {
+        		answer.add(temparr[1]+"/님이 나갔습니다.");
+        	} else if("Change".equals(temparr[0])) {
+        		usermap.put(temparr[1], temparr[2]);
+        	}
+        }
         
-        List<String> temp = Arrays.asList(record);
-        
+        return answer.stream().map(a -> usermap.get(a.split("/")[0]) + a.split("/")[1]).toArray(String[]::new);
+    }
+
+	// LV.1 [1차] 다트게임
+	/*
+	 다트 게임의 점수 계산 로직은 아래와 같다.
+	
+	다트 게임은 총 3번의 기회로 구성된다.
+	각 기회마다 얻을 수 있는 점수는 0점에서 10점까지이다.
+	점수와 함께 Single(S), Double(D), Triple(T) 영역이 존재하고 각 영역 당첨 시 점수에서 1제곱, 2제곱, 3제곱 (점수1 , 점수2 , 점수3 )으로 계산된다.
+	옵션으로 스타상(*) , 아차상(#)이 존재하며 스타상(*) 당첨 시 해당 점수와 바로 전에 얻은 점수를 각 2배로 만든다. 아차상(#) 당첨 시 해당 점수는 마이너스된다.
+	스타상(*)은 첫 번째 기회에서도 나올 수 있다. 이 경우 첫 번째 스타상(*)의 점수만 2배가 된다. (예제 4번 참고)
+	스타상(*)의 효과는 다른 스타상(*)의 효과와 중첩될 수 있다. 이 경우 중첩된 스타상(*) 점수는 4배가 된다. (예제 4번 참고)
+	스타상(*)의 효과는 아차상(#)의 효과와 중첩될 수 있다. 이 경우 중첩된 아차상(#)의 점수는 -2배가 된다. (예제 5번 참고)
+	Single(S), Double(D), Triple(T)은 점수마다 하나씩 존재한다.
+	스타상(*), 아차상(#)은 점수마다 둘 중 하나만 존재할 수 있으며, 존재하지 않을 수도 있다.
+	0~10의 정수와 문자 S, D, T, *, #로 구성된 문자열이 입력될 시 총점수를 반환하는 함수를 작성하라.
+	
+	입력 형식
+	"점수|보너스|[옵션]"으로 이루어진 문자열 3세트.
+	예) 1S2D*3T
+	
+	점수는 0에서 10 사이의 정수이다.
+	보너스는 S, D, T 중 하나이다.
+	옵선은 *이나 # 중 하나이며, 없을 수도 있다.
+	출력 형식
+	3번의 기회에서 얻은 점수 합계에 해당하는 정수값을 출력한다.
+	예) 37
+	 */
+	public static int solution_DartGame(String dartResult) {
+        int answer = 0;
+        char[] option = {'S', 'D', 'T', '*', '#'};
+        List<String> games = new ArrayList<>();
+        /*
+        int sliceidx = 0;
+        for(int i=0;i<dartResult.length();i++) {
+        	String currchar = dartResult.substring(i,i+1);
+        	if(Pattern.matches("^[0-9]*$", currchar)) {
+        		games.add(dartResult.substring(sliceidx,i));
+        		sliceidx = i;
+        	} else if(i+1==dartResult.length()) {
+        		games.add(dartResult.substring(sliceidx,i+1));
+        	}
+        }
+        */
+        int sliceidx = 0;
+        for(int i=0;i<dartResult.length();i++) {
+        	char currchar = dartResult.charAt(i);
+        	if(Arrays.asList(option).indexOf(currchar)!=-1) {
+        		System.out.println("check contain");
+        	}
+        }
+        for(String str : games) System.out.println(str);
         return answer;
     }
 }
