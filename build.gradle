@@ -29,7 +29,8 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     // 인메모리 관계형 데이터베이스 (메모리에서 실행 -> 어플리케이션 재시작마다 초기화)
     implementation 'com.h2database:h2'
-
+    // mustache
+    implementation 'org.springframework.boot:spring-boot-starter-mustache'
 }
 
 group 'com.hystudy.springboot'

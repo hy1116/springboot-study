@@ -2,6 +2,7 @@ package com.hystudy.springboot.service.posts;
 
 import com.hystudy.springboot.domain.posts.Posts;
 import com.hystudy.springboot.domain.posts.PostsRepository;
+import com.hystudy.springboot.web.dto.PostsListResponseDto;
 import com.hystudy.springboot.web.dto.PostsResponseDto;
 import com.hystudy.springboot.web.dto.PostsSaveRequestDto;
 import com.hystudy.springboot.web.dto.PostsUpdateRequestDto;
@@ -9,6 +10,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -39,5 +42,20 @@ public class PostsService {
         Posts entity = postsRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없습닉다. id = "+id));
         return new PostsResponseDto(entity);
+    }
+
+    // readOnly=true : 트랜잭션 범위는 유지하되 조회기능만 남겨두어 조회속도 개선
+    // 등록 수정 삭제 기능이 전혀 없는 서비스 메소드에 사용하는 것을 추천
+    @Transactional //(ReadOnly = true)
+    public List<PostsListResponseDto> findAllDesc(){
+        return postsRepository.findAllDesc().stream()
+                .map(PostsListResponseDto::new)
+                .collect(Collectors.toList());
+    }
+
+    @Transactional
+    public void delete(Long id){
+        Posts posts = postsRepository.findById(id).orElseThrow(() -> new IllegalArgumentException(("해당 게시글이 없습니다. id="+id)));
+        postsRepository.delete(posts);
     }
 }
