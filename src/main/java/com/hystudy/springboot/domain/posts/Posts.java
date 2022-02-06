@@ -1,5 +1,6 @@
 package com.hystudy.springboot.domain.posts;
 
+import com.hystudy.springboot.domain.BaseTimeEntity;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,7 +10,7 @@ import javax.persistence.*;
 @Getter // Lombok Annotation : 클래스 내 모든 필드의 getter 자동생성
 @NoArgsConstructor // Lombok Annotation : 기본생성자 자동추가 (ex. public Posts(){})
 @Entity // JPA Annotation : 테이블과 링크될 클레스임을 나타냄
-public class Posts {
+public class Posts extends BaseTimeEntity {
     @Id // 해당 테이블의 PK
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     // GeneratedValue:  PK 의 생성규착, 스프링부트2.0 에서는 GenerationTyp0e.IDENTITY 옵션을 줘야 auto increment 가 된다,

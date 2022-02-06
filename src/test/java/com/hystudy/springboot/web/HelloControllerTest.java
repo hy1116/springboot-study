@@ -11,7 +11,7 @@ import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@RunWith(SpringRunner.class) // 스프링부트와 junit 연결자
+@RunWith(value = SpringRunner.class) // 스프링부트와 junit 연결자
 @WebMvcTest
 public class HelloControllerTest {
     @Autowired
