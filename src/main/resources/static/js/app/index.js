@@ -18,7 +18,7 @@ var main = {
         var data = {
             title : $("#title").val(),
             author : $("#author").val(),
-            content : $("content").val()
+            content : $("#content").val()
         };
 
         $.ajax({
@@ -26,7 +26,7 @@ var main = {
             url : '/api/v1/posts',
             dataType : 'json',
             contentType : 'application/json; charset=utf-8',
-            data : JSON.stringify(data);
+            data : JSON.stringify(data)
         }).done(function(){
             alert("글이 등록되었습니다.");
             window.location.href = '/';
