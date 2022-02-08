@@ -46,18 +46,15 @@ public class ProgrammersControllerTest {
 		assertThat(ProgrammersController.solution_secretMap(6,new int[]{46, 33, 33, 22, 31, 50},new int[]{27, 56, 19, 14, 14, 10})).isEqualTo(new String[] {"######","###  #","##  ##"," #### "," #####","### # "});
 		
 	}
-	
+
 	@Test
-	public void solution_DartGame_test() { // 비밀지도
-		assertThat(ProgrammersController.solution_DartGame("1S2D*3T")).isEqualTo(37);
-		assertThat(ProgrammersController.solution_DartGame("1D2S#10S")).isEqualTo(9);
-		assertThat(ProgrammersController.solution_DartGame("1D2S0T")).isEqualTo(3);
-		assertThat(ProgrammersController.solution_DartGame("1S*2T*3S")).isEqualTo(23);
-		assertThat(ProgrammersController.solution_DartGame("1D#2S*3S")).isEqualTo(5);
-		assertThat(ProgrammersController.solution_DartGame("1T2D3D#")).isEqualTo(-4);
-		assertThat(ProgrammersController.solution_DartGame("1D2S3T*")).isEqualTo(59);
+	public void solution_xn_test() { // x만큼 간격이 있는 n개의 숫자
+		assertThat(ProgrammersController.solution_xn(2, 5)).isEqualTo(new long[] {2, 4, 6, 8, 10});
+		assertThat(ProgrammersController.solution_xn(4, 3)).isEqualTo(new long[] {4, 8, 12});
+		assertThat(ProgrammersController.solution_xn(-4, 2)).isEqualTo(new long[] {-4, -8});
+
 	}
-	
+
 	@Test
 	public void solution_moreSpicy_test() { // 비밀지도
 		assertThat(ProgrammersController.solution_moreSpicy(new int[] {12, 1, 2, 3, 9, 10},7)).isEqualTo(2);
@@ -67,8 +64,29 @@ public class ProgrammersControllerTest {
 	}
 	
 	@Test
-	public void solution_openKaKao_test() { // 비밀지도
+	public void solution_openKaKao_test() { // 오픈채팅방
 		assertThat(ProgrammersController.solution_openKaKao(new String[] {"Enter uid1234 Muzi", "Enter uid4567 Prodo", "Leave uid1234", "Enter uid1234 Prodo", "Change uid4567 Ryan"}))
 		.isEqualTo(new String[] {"Prodo님이 들어왔습니다.", "Ryan님이 들어왔습니다.", "Prodo님이 나갔습니다.", "Prodo님이 들어왔습니다."});
+	}
+
+	@Test
+	public void solution_DartGame_test() { // 다트게임임		assertThat(ProgrammersController.solution_DartGame("1S2D*3T")).isEqualTo(37);
+		assertThat(ProgrammersController.solution_DartGame("1D2S#10S")).isEqualTo(9);
+		assertThat(ProgrammersController.solution_DartGame("1D2S0T")).isEqualTo(3);
+		assertThat(ProgrammersController.solution_DartGame("1S*2T*3S")).isEqualTo(23);
+		assertThat(ProgrammersController.solution_DartGame("1D#2S*3S")).isEqualTo(5);
+		assertThat(ProgrammersController.solution_DartGame("1T2D3D#")).isEqualTo(-4);
+		assertThat(ProgrammersController.solution_DartGame("1D2S3T*")).isEqualTo(59);
+		assertThat(ProgrammersController.solution_DartGame("0S0S0S")).isEqualTo(0);
+		assertThat(ProgrammersController.solution_DartGame("0D0D10S")).isEqualTo(10);
+		assertThat(ProgrammersController.solution_DartGame("10D10S0D")).isEqualTo(110);
+		assertThat(ProgrammersController.solution_DartGame("1S2D3T*")).isEqualTo(63);
+		assertThat(ProgrammersController.solution_DartGame("1S2D*3T*")).isEqualTo(72);
+		assertThat(ProgrammersController.solution_DartGame("1S*2D*3T*")).isEqualTo(74);
+	}
+
+	@Test
+	public void solution_normalSquare_test() { // 다트게임임		assertThat(ProgrammersController.solution_DartGame("1S2D*3T")).isEqualTo(37);
+		assertThat(ProgrammersController.solution_normalSquare(8, 12)).isEqualTo(80);
 	}
 }
