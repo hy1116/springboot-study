@@ -205,9 +205,18 @@ public class ProgrammersController {
 
 	// LV1. 멀쩡한 사각형
 	public static long solution_normalSquare(int w, int h) {
-		long answer = 1;
-		//answer = (w*h)-(w/2)*(h/2);
-
-		return answer;
+		long answer = w*h; // 첫 사각형 크기
+		double line = w>h?(double)h/w:(double)w/h; // 기울기
+		if(0.5 < line && line <= 1) line /= 2;
+		int idx = w>h?h:w;
+		int su = 1;
+		while(idx>1){
+			if(w % idx == 0 && h % idx == 0){
+				su *= idx;
+				w /= idx;
+				h /= idx;
+			} else idx--;
+		}
+		return answer - (int)(su*w*h*line*2);
 	}
 }

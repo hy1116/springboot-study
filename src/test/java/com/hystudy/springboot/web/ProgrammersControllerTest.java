@@ -86,7 +86,11 @@ public class ProgrammersControllerTest {
 	}
 
 	@Test
-	public void solution_normalSquare_test() { // 다트게임임		assertThat(ProgrammersController.solution_DartGame("1S2D*3T")).isEqualTo(37);
-		assertThat(ProgrammersController.solution_normalSquare(8, 12)).isEqualTo(80);
+	public void solution_normalSquare_test() { // 다트게임임
+		assertThat(ProgrammersController.solution_normalSquare(8, 12)).isEqualTo(80); // 8X12-(4X6)   1/3
+		assertThat(ProgrammersController.solution_normalSquare(6, 12)).isEqualTo(60); // 6X12-(6X2)   1/2
+		assertThat(ProgrammersController.solution_normalSquare(8, 8)).isEqualTo(56); // 8X8-(8X1)     1/1
+		assertThat(ProgrammersController.solution_normalSquare(4, 12)).isEqualTo(36); // 4x12-(4X3)   1/3
+		assertThat(ProgrammersController.solution_normalSquare(6, 8)).isEqualTo(36); // 6X8-(2X6)     1/4
 	}
 }
