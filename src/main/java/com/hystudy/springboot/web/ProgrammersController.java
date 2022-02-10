@@ -1,5 +1,6 @@
 package com.hystudy.springboot.web;
 
+import java.math.BigInteger;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -203,20 +204,99 @@ public class ProgrammersController {
         return answer;
     }
 
-	// LV1. 멀쩡한 사각형
-	public static long solution_normalSquare(int w, int h) {
+	// LV2. 멀쩡한 사각형
+	public static long solution_normalSquare(long w, long h) {
 		long answer = w*h; // 첫 사각형 크기
-		double line = w>h?(double)h/w:(double)w/h; // 기울기
-		if(0.5 < line && line <= 1) line /= 2;
-		int idx = w>h?h:w;
-		int su = 1;
-		while(idx>1){
+
+		long gcd = 1,idx = w;
+		while(1 < idx){ // 공약수 구하기
 			if(w % idx == 0 && h % idx == 0){
-				su *= idx;
+				gcd *= idx;
 				w /= idx;
 				h /= idx;
+				idx = w;
 			} else idx--;
 		}
-		return answer - (int)(su*w*h*line*2);
+		long gcd2 = BigInteger.valueOf(w).gcd(BigInteger.valueOf(h)).longValue();
+		return answer-gcd*(w+h-1);
+	}
+
+	// LV1. 음양 더하기
+	public static int solution_addInt(int[] absolutes, boolean[] signs) {
+		return IntStream.range(0,absolutes.length).boxed().mapToInt(i->signs[i]?absolutes[i]:-absolutes[i]).sum();
+	}
+
+	// LV1. 없는 숫자 더하기
+	public static int solution_existNum(int[] numbers){
+		int answer = 1+2+3+4+5+6+7+8+9;
+		for(int n : numbers) answer -= n;
+		return answer;
+	}
+
+	// LV1. 두정수 사이의 합
+	public static long solution_sumBetweenInt(int a, int b) {
+		int min = Math.min(a,b);
+		int max = Math.max(a,b);
+		long answer = min;
+		while(min <= max){
+			if(min == max) return answer;
+			answer += ++min;
+		}
+		return answer;
+		//return (long)IntStream.rangeClosed(Math.min(a,b),Math.max(a,b)).sum();
+	}
+
+	// LV1. 수박수박수박수..
+	public String solution_watermelon(int n) {
+		String answer = "";
+		for(int i=0;i<n;i++){
+			answer += n%2==0?"수":"박";
+		}
+		return answer;
+	}
+
+	// LV1. p와 y의 갯수
+	boolean solution_py(String s) {
+		int p=0,y=0;
+		for(char c :s.toLowerCase().toCharArray()) {
+			if(c=='p')p++;
+			if(c=='y')y++;
+		}
+		if(p==y) return true;
+		else return false;
+	}
+
+	// LV1. 평균
+	public double solution_avg(int[] arr) {
+		return Arrays.stream(arr).average().getAsDouble();
+	}
+
+	// LV1. 나머지가 1이 되는 수 찾기
+	public int solution_namaji(int n) {
+		return IntStream.rangeClosed(3,n).filter(i -> n%i==1).findFirst().getAsInt();
+	}
+
+	// LV1. 나머지가 1이 되는 수 찾기
+	public int solution(int n) {
+		int answer = 0;
+		for(int i=1;i<=n;i++){
+			if(n%i==0) answer += i;
+		}
+		return answer;
+	}
+
+	public int[] solution(int[] arr) {
+		if (arr.length < 1) return  new int[]{-1};
+		return Arrays.stream(arr).filter(a -> a != Arrays.stream(arr).min().getAsInt()).toArray();
+	}
+
+	public String solution(String phone_number) {
+		String answer = "";
+		for(int i=0;i<phone_number.length();i++){
+			if(phone_number.length()-4 < i){
+				answer += phone_number.charAt(i);
+			}else answer += "*";
+		}
+		return answer;
 	}
 }

@@ -70,7 +70,7 @@ public class ProgrammersControllerTest {
 	}
 
 	@Test
-	public void solution_DartGame_test() { // 다트게임임		assertThat(ProgrammersController.solution_DartGame("1S2D*3T")).isEqualTo(37);
+	public void solution_DartGame_test() { // 다트게임
 		assertThat(ProgrammersController.solution_DartGame("1D2S#10S")).isEqualTo(9);
 		assertThat(ProgrammersController.solution_DartGame("1D2S0T")).isEqualTo(3);
 		assertThat(ProgrammersController.solution_DartGame("1S*2T*3S")).isEqualTo(23);
@@ -86,11 +86,42 @@ public class ProgrammersControllerTest {
 	}
 
 	@Test
-	public void solution_normalSquare_test() { // 다트게임임
-		assertThat(ProgrammersController.solution_normalSquare(8, 12)).isEqualTo(80); // 8X12-(4X6)   1/3
-		assertThat(ProgrammersController.solution_normalSquare(6, 12)).isEqualTo(60); // 6X12-(6X2)   1/2
-		assertThat(ProgrammersController.solution_normalSquare(8, 8)).isEqualTo(56); // 8X8-(8X1)     1/1
-		assertThat(ProgrammersController.solution_normalSquare(4, 12)).isEqualTo(36); // 4x12-(4X3)   1/3
-		assertThat(ProgrammersController.solution_normalSquare(6, 8)).isEqualTo(36); // 6X8-(2X6)     1/4
+	public void solution_normalSquare_test() { // 멀쩡한 사각형
+		assertThat(ProgrammersController.solution_normalSquare(8, 12)).isEqualTo(80); // 8X12	-(공약수4 X 나머지2X3=4)(16)		기울기2/3
+		assertThat(ProgrammersController.solution_normalSquare(6, 12)).isEqualTo(60); // 6X12	-(공약수6 X 나머지1X2)(12)		기울기1/2X
+		assertThat(ProgrammersController.solution_normalSquare(8, 8)).isEqualTo(56);  // 	8X8	-(공약수8 X 나머지1X1)(8)			기울기1/1X
+		assertThat(ProgrammersController.solution_normalSquare(4, 12)).isEqualTo(36); // 4x12	-(공약수4 X 나머지1X3)(12)		기울기1/3X
+		assertThat(ProgrammersController.solution_normalSquare(3, 12)).isEqualTo(24); // 3x12	-(공약수3 X 나머지1X4)(12)		기울기1/4X
+		assertThat(ProgrammersController.solution_normalSquare(6, 8)).isEqualTo(36);  // 	6X8	-(공약수2 X 나머지3X4=9-3)(12)	기울기3/4
+		assertThat(ProgrammersController.solution_normalSquare(6, 10)).isEqualTo(46); // 6X10	-(공약수2 X 나머지3X5=9-2)(14)	기울기3/5
+		assertThat(ProgrammersController.solution_normalSquare(3, 5)).isEqualTo(8); // 	3X5	-(공약수1 X 나머지3X5=9-2)(7)		기울기3/5
+		assertThat(ProgrammersController.solution_normalSquare(2, 5)).isEqualTo(4); // 	2X5	-(공약수1 X 나머지3X5=9-2)(7)		기울기3/5
+	}
+
+	@Test
+	public void solution_addInt_test() { // 음양 더하기
+		assertThat(ProgrammersController.solution_addInt(new int[]{4, 7, 12},new boolean[]{true, false, true})).isEqualTo(9);
+		assertThat(ProgrammersController.solution_addInt(new int[]{1, 2, 3},new boolean[]{false, false, true})).isEqualTo(0);
+	}
+
+	@Test
+	public void solution_existNum_test() { // 없는 숫자 더하기
+		assertThat(ProgrammersController.solution_existNum(new int[]{1,2,3,4,6,7,8,0})).isEqualTo(14);
+	}
+
+	@Test
+	public void solution_sumBetweenInt_test() { // 두정수 사이의 합
+		assertThat(ProgrammersController.solution_sumBetweenInt(3,5)).isEqualTo(12);
+		assertThat(ProgrammersController.solution_sumBetweenInt(3,3)).isEqualTo(3);
+		assertThat(ProgrammersController.solution_sumBetweenInt(5,3)).isEqualTo(12);
+		assertThat(ProgrammersController.solution_sumBetweenInt(-6,-3)).isEqualTo(-6-5-4-3);
+	}
+
+	@Test
+	public void solution_py_test() { // 두정수 사이의 합
+		assertThat(ProgrammersController.solution_sumBetweenInt(3,5)).isEqualTo(12);
+		assertThat(ProgrammersController.solution_sumBetweenInt(3,3)).isEqualTo(3);
+		assertThat(ProgrammersController.solution_sumBetweenInt(5,3)).isEqualTo(12);
+		assertThat(ProgrammersController.solution_sumBetweenInt(-6,-3)).isEqualTo(-6-5-4-3);
 	}
 }
