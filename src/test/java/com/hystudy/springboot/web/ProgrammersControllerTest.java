@@ -118,10 +118,64 @@ public class ProgrammersControllerTest {
 	}
 
 	@Test
-	public void solution_py_test() { // 두정수 사이의 합
-		assertThat(ProgrammersController.solution_sumBetweenInt(3,5)).isEqualTo(12);
-		assertThat(ProgrammersController.solution_sumBetweenInt(3,3)).isEqualTo(3);
-		assertThat(ProgrammersController.solution_sumBetweenInt(5,3)).isEqualTo(12);
-		assertThat(ProgrammersController.solution_sumBetweenInt(-6,-3)).isEqualTo(-6-5-4-3);
+	public void solution_strangeString_test() {
+		assertThat(ProgrammersController.solution_strangeString("hello world")).isEqualTo("HeLlO WoRlD");
+	}
+
+	@Test
+	public void solution_IntDesc_test() {
+		assertThat(ProgrammersController.solution_IntDesc(123456)).isEqualTo(654321);
+	}
+
+	@Test
+	public void solution_reverseIntArr_test() {
+		assertThat(ProgrammersController.solution_reverseIntArr(123456)).isEqualTo(new int[]{6,5,4,3,2,1});
+		assertThat(ProgrammersController.solution_reverseIntArr(0)).isEqualTo(new int[]{0});
+	}
+
+	@Test
+	public void solution_SecretCode_test() {
+		assertThat(ProgrammersController.solution_SecretCode("a",1)).isEqualTo("b");
+		assertThat(ProgrammersController.solution_SecretCode("Z",25)).isEqualTo("Y");
+	}
+
+	@Test
+	public void solution_findDecimal_test() {
+		assertThat(ProgrammersController.solution_findDecimal(10)).isEqualTo(4);
+		assertThat(ProgrammersController.solution_findDecimal(5)).isEqualTo(3);
+	}
+	@Test
+	public void solution_three_test() {
+		assertThat(ProgrammersController.solution_three(45)).isEqualTo(7);
+	}
+
+	@Test
+	public void solution_MathTest_test() {
+		assertThat(ProgrammersController.solution_MathTest(new int[]{1,2,3,4,5})).isEqualTo(new int[]{1});
+	}
+
+	@Test
+	public void solution_addMeasure_test() {
+		assertThat(ProgrammersController.solution_addMeasure(13,17)).isEqualTo(43);
+	}
+
+	@Test
+	public void solution_makeDecimal_test() {
+		assertThat(ProgrammersController.solution_makeDecimal(new int[]{1,2,3,4})).isEqualTo(1);
+		assertThat(ProgrammersController.solution_makeDecimal(new int[]{1,2,7,6,4})).isEqualTo(4);
+	}
+
+	@Test
+	public void solution_psyClothes_test() {
+		assertThat(ProgrammersController.solution_psyClothes(5,new int[]{2,4},new int[]{1,3,5})).isEqualTo(5);
+		assertThat(ProgrammersController.solution_psyClothes(5,new int[]{2,4},new int[]{3})).isEqualTo(4);
+		assertThat(ProgrammersController.solution_psyClothes(3,new int[]{3},new int[]{1})).isEqualTo(2);
+		assertThat(ProgrammersController.solution_psyClothes(3,new int[]{3},new int[]{3})).isEqualTo(3);
+		assertThat(ProgrammersController.solution_psyClothes(5,new int[]{1,2,3,4,5},new int[]{})).isEqualTo(0);
+		assertThat(ProgrammersController.solution_psyClothes(5,new int[]{1,2,3,4,5},new int[]{1,2,3,4,5})).isEqualTo(5);
+		assertThat(ProgrammersController.solution_psyClothes(5,new int[]{1,2,3,4,5},new int[]{1,2,3,4,5})).isEqualTo(5);
+		assertThat(ProgrammersController.solution_psyClothes(2,new int[]{1,2},new int[]{1,2})).isEqualTo(2);
+		assertThat(ProgrammersController.solution_psyClothes(2,new int[]{},new int[]{})).isEqualTo(2);
+		assertThat(ProgrammersController.solution_psyClothes(2,new int[]{},new int[]{1,2})).isEqualTo(2);
 	}
 }
