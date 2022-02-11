@@ -469,7 +469,7 @@ public class ProgrammersController {
 	}
 
 	//LV1. 체육복
-	public static int solution_psyClothes(int n, int[] lost, int[] reserve) {
+	public static int solution_gymClothes(int n, int[] lost, int[] reserve) {
 		int answer = n;
 		Map<Integer,String> map = new HashMap<>();
 		for(int i=1;i<=n;i++) map.put(i,null); // 학생 수 만큼 배열 생성
@@ -481,45 +481,17 @@ public class ProgrammersController {
 		}
 		for(int i=0;i<=map.size();i++){
 			if("lost".equals(map.get(i))){
-				if(map.get(i-1)!=null && map.containsValue("reserve")) {
+				if(map.get(i-1)!=null && "reserve".equals(map.get(i-1))) {
 					map.put(i,null);
 					map.put(i-1,null);
-				} else if(map.get(i+1)!=null && map.containsValue("reserve")) {
+				} else if(map.get(i+1)!=null && "reserve".equals(map.get(i+1))) {
 					map.put(i,null);
 					map.put(i+1,null);
 				}
 			}
 		}
-		int nullsum = 0;
-		for (int k :map.keySet()){
-			System.out.println("key : "+k + " / val : "+map.get(k));
-			if("lost".equals(map.get(k))) answer--;
-			if(map.get(k)==null) nullsum++;
-		}
-		System.out.println(nullsum);
-		return nullsum;
-		//(int)Arrays.asList(map.entrySet()).stream().filter(e -> e.contains("lost")).count()
-		/*
-		List<Integer> reserveList =  Arrays.stream(reserve).boxed().collect(Collectors.toList());
-		List<Integer> lostList =  Arrays.stream(lost).boxed().collect(Collectors.toList());
-		for (int j=0;j < lostList.size();j++){
-			int me = reserveList.indexOf(lostList.get(j));
-			if(me > -1){
-				reserveList.remove(me);
-				lostList.remove(j);
-			}
-		}
-		for (int i=0;i < lostList.size();i++){
-			int front = reserveList.indexOf(lostList.get(i)-1);
-			int back = reserveList.indexOf(lostList.get(i)+1);
-			if(front > -1 || back > -1){
-				if(front > -1)reserveList.remove(front);
-				if(back > -1) reserveList.remove(back);
-			}
-			else answer--;
-		}
+		for (int k :map.keySet()) if("lost".equals(map.get(k))) answer--;
 		return answer;
-		*/
 	}
 
 	//LV1. 모의고사

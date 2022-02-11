@@ -167,15 +167,15 @@ public class ProgrammersControllerTest {
 
 	@Test
 	public void solution_psyClothes_test() {
-		assertThat(ProgrammersController.solution_psyClothes(5,new int[]{2,4},new int[]{1,3,5})).isEqualTo(5);
-		assertThat(ProgrammersController.solution_psyClothes(5,new int[]{2,4},new int[]{3})).isEqualTo(4);
-		assertThat(ProgrammersController.solution_psyClothes(3,new int[]{3},new int[]{1})).isEqualTo(2);
-		assertThat(ProgrammersController.solution_psyClothes(3,new int[]{3},new int[]{3})).isEqualTo(3);
-		assertThat(ProgrammersController.solution_psyClothes(5,new int[]{1,2,3,4,5},new int[]{})).isEqualTo(0);
-		assertThat(ProgrammersController.solution_psyClothes(5,new int[]{1,2,3,4,5},new int[]{1,2,3,4,5})).isEqualTo(5);
-		assertThat(ProgrammersController.solution_psyClothes(5,new int[]{1,2,3,4,5},new int[]{1,2,3,4,5})).isEqualTo(5);
-		assertThat(ProgrammersController.solution_psyClothes(2,new int[]{1,2},new int[]{1,2})).isEqualTo(2);
-		assertThat(ProgrammersController.solution_psyClothes(2,new int[]{},new int[]{})).isEqualTo(2);
-		assertThat(ProgrammersController.solution_psyClothes(2,new int[]{},new int[]{1,2})).isEqualTo(2);
+		assertThat(ProgrammersController.solution_gymClothes(5,new int[]{2,4},new int[]{1,3,5})).isEqualTo(5);
+		assertThat(ProgrammersController.solution_gymClothes(5,new int[]{2,4},new int[]{3})).isEqualTo(4);
+		assertThat(ProgrammersController.solution_gymClothes(3,new int[]{3},new int[]{1})).isEqualTo(2);
+		assertThat(ProgrammersController.solution_gymClothes(3,new int[]{3},new int[]{3})).isEqualTo(3);
+		assertThat(ProgrammersController.solution_gymClothes(5,new int[]{1,2,3,4,5},new int[]{})).isEqualTo(0);
+		assertThat(ProgrammersController.solution_gymClothes(5,new int[]{1,2,3,4,5},new int[]{1,2,3,4,5})).isEqualTo(5);
+		assertThat(ProgrammersController.solution_gymClothes(5,new int[]{1,2,3,4,5},new int[]{1,2,3,4,5})).isEqualTo(5);
+		assertThat(ProgrammersController.solution_gymClothes(2,new int[]{1,2},new int[]{1,2})).isEqualTo(2);
+		assertThat(ProgrammersController.solution_gymClothes(2,new int[]{},new int[]{})).isEqualTo(2);
+		assertThat(ProgrammersController.solution_gymClothes(2,new int[]{},new int[]{1,2})).isEqualTo(2);
 	}
 }
