@@ -496,31 +496,25 @@ public class ProgrammersController {
 
 	//LV1. 모의고사
 	public static int[] solution_MathTest(int[] answers) {
-		int[] answer = {};
-		/*
-		1번 수포자가 찍는 방식: 1, 2, 3, 4, 5, 1, 2, 3, 4, 5, ...
-		2번 수포자가 찍는 방식: 2, 1, 2, 3, 2, 4, 2, 5, 2, 1, 2, 3, 2, 4, 2, 5, ...
-		3번 수포자가 찍는 방식: 3, 3, 1, 1, 2, 2, 4, 4, 5, 5, 3, 3, 1, 1, 2, 2, 4, 4, 5, 5, ...
-		*/
-		int supo1=0,supo2=0,supo3 =0;
+		List<Integer> answer = new ArrayList<>();
 
-		for(int i=0;i<answers.length;i++){
-			// 1번 수포자
-			if(answers[i]==(i%5)+1){
-				supo1 += 100/answers.length;
-			}
-			// 2번 수포자
-			if(answers[i]==i%3+(5-i%2)){
-				supo2 += 100/answers.length;
-			}
-			// 3번 수포자
-			if(answers[i]==i%2){
-				supo3 += 100/answers.length;
-			}
-			System.out.println((i+1)%2+((i+1)/2)+2);
+		int[] supo1arr = {1, 2, 3, 4, 5, 1, 2, 3, 4, 5};
+		int[] supo2arr = {2, 1, 2, 3, 2, 4, 2, 5, 2, 1, 2, 3, 2, 4, 2, 5};
+		int[] supo3arr = {3, 3, 1, 1, 2, 2, 4, 4, 5, 5, 3, 3, 1, 1, 2, 2, 4, 4, 5, 5};
+		int supo1=0,supo2=0,supo3=0;
+
+		for (int i=0;i<answers.length;i++){
+			if(supo1arr[i-(int)(Math.floor(i/supo1arr.length)*supo1arr.length)]==answers[i]) supo1++;
+			if(supo2arr[i-(int)(Math.floor(i/supo2arr.length)*supo2arr.length)]==answers[i]) supo2++;
+			if(supo3arr[i-(int)(Math.floor(i/supo3arr.length)*supo3arr.length)]==answers[i]) supo3++;
 		}
-		System.out.println("supo1 : "+supo1+" / supo2 : "+supo2+" / supo3 : "+supo3);
+		int max = Math.max(supo1,supo2);
+		max = Math.max(max,supo3);
 
-		return answer;
+		if(supo1==max) answer.add(1);
+		if(supo2==max) answer.add(2);
+		if(supo3==max) answer.add(3);
+
+		return answer.stream().mapToInt(a->a).toArray();
 	}
 }
