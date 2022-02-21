@@ -21,7 +21,7 @@ repositories {
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'org.jetbrains:annotations:20.1.0'
+    implementation 'org.jetbrains:annotations:22.0.0'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     // lombok
     annotationProcessor 'org.projectlombok:lombok'
@@ -32,6 +32,13 @@ dependencies {
     implementation 'com.h2database:h2'
     // mustache
     implementation 'org.springframework.boot:spring-boot-starter-mustache'
+    // spring security 소셜 로그인 구현을 위한 의존성
+    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+    // 세션 저장소로 DB 사용
+    implementation 'org.springframework.session:spring-session-jdbc'
+    // 스프링 시큐리티 임의로 인증된 사용자를 추가하여 API TEST
+    testImplementation 'org.springframework.security:spring-security-test'
+
 }
 
 group 'com.hystudy.springboot'

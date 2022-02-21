@@ -1,6 +1,7 @@
 package com.hystudy.springboot.web;
 
-import com.hystudy.springboot.domain.posts.PostsRepository;
+import com.hystudy.springboot.config.auth.LoginUser;
+import com.hystudy.springboot.config.auth.dto.SessionUser;
 import com.hystudy.springboot.service.posts.PostsService;
 import com.hystudy.springboot.web.dto.PostsResponseDto;
 import lombok.RequiredArgsConstructor;
@@ -15,8 +16,13 @@ public class IndexController {
     private final PostsService postsService;
 
     @GetMapping("/")
-    public String index(Model model){ // 서버 템플릿 엔진에서 사용 할 수 있는 객체를 저장할 수 있습니다.
+    public String index(Model model, @LoginUser SessionUser user){ // 서버 템플릿 엔진에서 사용 할 수 있는 객체를 저장할 수 있습니다.
         model.addAttribute("posts",postsService.findAllDesc());
+
+        if(user!=null){
+            model.addAttribute("userName",user.getName());
+        }
+
         return "index";
     }
 

@@ -178,4 +178,30 @@ public class ProgrammersControllerTest {
 		assertThat(ProgrammersController.solution_gymClothes(2,new int[]{},new int[]{})).isEqualTo(2);
 		assertThat(ProgrammersController.solution_gymClothes(2,new int[]{},new int[]{1,2})).isEqualTo(2);
 	}
+
+	@Test
+	public void solution_124Country_test() {
+		assertThat(ProgrammersController.solution_124Country(1)).isEqualTo("1");
+		assertThat(ProgrammersController.solution_124Country(2)).isEqualTo("2");
+		assertThat(ProgrammersController.solution_124Country(3)).isEqualTo("4");
+		assertThat(ProgrammersController.solution_124Country(4)).isEqualTo("11");
+		assertThat(ProgrammersController.solution_124Country(5)).isEqualTo("12");
+	}
+
+	@Test
+	public void solution_keepDistance_test() {
+		assertThat(ProgrammersController.solution_keepDistance(new String[][]{{"POOOP", "OXXOX", "OPXPX", "OOXOX", "POXXP"}, {"POOPX", "OXPXP", "PXXXO", "OXXXO", "OOOPP"}, {"PXOPX", "OXOXP", "OXPOX", "OXXOP", "PXPOX"}, {"OOOXX", "XOOOX", "OOOXX", "OXOOX", "OOOOO"}, {"PXPXP", "XPXPX", "PXPXP", "XPXPX", "PXPXP"}})).isEqualTo(new int[]{1, 0, 1, 1, 1});
+	}
+
+	@Test
+	public void solution_lcm_test() {
+		assertThat(ProgrammersController.solution_lcm(new int[]{2,4,3,6})).isEqualTo(12);
+		assertThat(ProgrammersController.solution_lcm(new int[]{4})).isEqualTo(4);
+		assertThat(ProgrammersController.solution_lcm(new int[]{12,12,5})).isEqualTo(60);
+	}
+
+	@Test
+	public void solution_jadenCase_test() {
+		assertThat(ProgrammersController.solution_jadenCase("3people unFollowed me")).isEqualTo("3people Unfollowed Me");
+	}
 }

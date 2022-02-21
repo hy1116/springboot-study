@@ -3,8 +3,10 @@ package com.hystudy.springboot.web;
 import org.apache.logging.log4j.util.Chars;
 
 import javax.xml.stream.events.Characters;
+import java.awt.*;
 import java.math.BigInteger;
 import java.util.*;
+import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -297,12 +299,14 @@ public class ProgrammersController {
 		return answer;
 	}
 
-	public int[] solution_2(int[] arr) {
+	// LV1. 작은 수 빼기
+	public int[] solution_removeMin(int[] arr) {
 		if (arr.length < 1) return new int[]{-1};
 		return Arrays.stream(arr).filter(a -> a != Arrays.stream(arr).min().getAsInt()).toArray();
 	}
 
-	public String solution_3(String phone_number) {
+	// LV1. 전화번호 가리기
+	public String solution_maskingPhoneNumber(String phone_number) {
 		String answer = "";
 		for (int i = 0; i < phone_number.length(); i++) {
 			if (phone_number.length() - 4 < i) {
@@ -452,7 +456,7 @@ public class ProgrammersController {
 	}
 
 	//LV1. 최소 직사각형
-	public int solution(int[][] sizes) {
+	public int solution_leastSquare(int[][] sizes) {
 		int maxw = 0,maxh=0;
 		for(int i=0;i<sizes.length;i++){
 			if(maxw < sizes[i][0]) maxw = sizes[i][0];
@@ -462,7 +466,7 @@ public class ProgrammersController {
 	}
 
 	//LV1. 폰켓몬
-	public int solution(int[] nums) {
+	public int solution_phoneKetMon(int[] nums) {
 		int answer = nums.length/2;
 		int kind = (int)Arrays.stream(nums).distinct().count();
 		return answer<kind?answer:kind;
@@ -516,5 +520,95 @@ public class ProgrammersController {
 		if(supo3==max) answer.add(3);
 
 		return answer.stream().mapToInt(a->a).toArray();
+	}
+
+	// LV2. 124 나라의 숫자
+	public static String solution_124Country(int n) {
+		StringBuffer sb = new StringBuffer();
+		while(n > 0){
+			int su = n%3==0?3:n%3;
+			sb.append((int)Math.pow(2,su-1));
+			n /= 3;
+			if(su==3) n -= 1;
+		}
+		return sb.reverse().toString();
+	}
+
+	// LV2. 거리두기 확인하기
+	public static int[] solution_keepDistance(String[][] places) {
+		int[] answer = new int[]{1,1,1,1,1};
+		for(int i=0;i<places.length;i++){ // 각 대기실
+			// 참가자 리스트 확인
+			List<int[]> plist = new ArrayList<>();
+			for(int j=0;j<places[0].length;j++){ // 각 열
+				String[] temparr = places[i][j].split("");
+				for(int k=0;k<temparr.length;k++){ // 각 행
+					if("P".equals(temparr[k])) plist.add(new int[]{j,k});
+				}
+			}
+
+			// 거리 검색
+			for (int j=0;j<plist.size()-1;j++){
+				for (int k=j+1;k<plist.size();k++){
+					int xdistance = Math.abs(plist.get(j)[0]-plist.get(k)[0]);
+					int ydistance = Math.abs(plist.get(j)[1]-plist.get(k)[1]);
+					int xpos = plist.get(j)[0]>plist.get(k)[0]?plist.get(k)[0]:plist.get(j)[0];
+					int ypos = plist.get(j)[1]>plist.get(k)[1]?plist.get(k)[1]:plist.get(j)[1];
+
+					if(xdistance+ydistance<=1){
+						answer[i]=0;
+						break;
+					}else if(xdistance+ydistance==2){
+						if(xdistance==ydistance){
+							if ("0".equals(places[i][xpos].split("")[ypos])
+							||"0".equals(places[i][xpos+1].split("")[ypos])
+							||"0".equals(places[i][xpos].split("")[ypos+1])
+							||"0".equals(places[i][xpos+1].split("")[ypos+1])){
+								answer[i]=0;
+								break;
+							}
+						} else if(xdistance==0 && !"X".equals(places[i][xpos].split("")[ypos+1])){
+							answer[i]=0;
+							break;
+						} else if(ydistance==0 && !"X".equals(places[i][xpos+1].split("")[ypos])){
+							answer[i]=0;
+							break;
+						}
+					}
+				}
+				if(answer[i]==0) break;
+			}
+		}
+		return answer;
+	}
+
+	// LV2. n개의 최소공배수
+	public static int solution_lcm(int[] arr) {
+		int answer = 1;
+
+		for (int i=0;i<arr.length-1;i++){
+			BigInteger gcd = BigInteger.valueOf(1);
+			for(int k=i+1;k<arr.length;k++) {
+				gcd = BigInteger.valueOf(arr[i]).gcd(BigInteger.valueOf(arr[k]));
+				if (1 < gcd.intValue()) {
+					for (int j = 0; j < arr.length; j++) {
+						if (arr[j] % gcd.intValue() == 0) {
+							arr[j] /= gcd.intValue();
+						}
+					}
+					answer *= gcd.intValue();
+				}
+			}
+		}
+		for(int a: arr) answer *= a;
+
+		return answer;
+	}
+
+	// LV2. JadenCase 문자열 만들기
+	public static String solution_jadenCase(String s) {
+		return Arrays.stream(s.split(" "))
+				.map(a -> a.split("")[0].toUpperCase()+a.substring(1).toLowerCase())
+				.collect(Collectors.joining(" "));
 	}
 }
