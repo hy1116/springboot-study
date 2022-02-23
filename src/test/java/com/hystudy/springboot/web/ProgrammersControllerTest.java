@@ -204,4 +204,16 @@ public class ProgrammersControllerTest {
 	public void solution_jadenCase_test() {
 		assertThat(ProgrammersController.solution_jadenCase("3people unFollowed me")).isEqualTo("3people Unfollowed Me");
 	}
+
+	@Test
+	public void solution_max_int_test(){
+		assertThat(ProgrammersController.solution_max_int(new int[]{344, 34})).isEqualTo("34434");
+		assertThat(ProgrammersController.solution_max_int(new int[]{3, 30, 34, 5, 9,300})).isEqualTo("9534330300");
+		assertThat(ProgrammersController.solution_max_int(new int[]{343, 344, 34})).isEqualTo("34434343");
+	}
+
+	@Test
+	public void solution_matrix_rotation_test(){
+		assertThat(ProgrammersController.solution_matrix_rotation(6,6,new int[][]{{2, 2, 5, 4},{3, 3, 6, 6}, {5, 1, 6, 3}})).isEqualTo(new int[]{8,10,25});
+	}
 }

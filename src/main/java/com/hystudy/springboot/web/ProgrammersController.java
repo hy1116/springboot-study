@@ -1,16 +1,11 @@
 package com.hystudy.springboot.web;
 
-import org.apache.logging.log4j.util.Chars;
-
-import javax.xml.stream.events.Characters;
-import java.awt.*;
 import java.math.BigInteger;
 import java.util.*;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
 public class ProgrammersController {
 	// Lv.1 신고 결과 받기
@@ -610,5 +605,105 @@ public class ProgrammersController {
 		return Arrays.stream(s.split(" "))
 				.map(a -> a.split("")[0].toUpperCase()+a.substring(1).toLowerCase())
 				.collect(Collectors.joining(" "));
+	}
+
+	// LV2. 가장 큰 수
+	public static String solution_max_int(int[] numbers) {
+		List<String> tempList = new ArrayList<>();
+		Map<Integer,String> tempmap = new LinkedHashMap<>();
+		for(int num : numbers){
+			if(String.valueOf(num).length() < 4){
+				String tempstr = String.valueOf(num);
+				for(int i=String.valueOf(num).length();i<4;i++){
+					tempstr += String.valueOf(num).charAt(String.valueOf(num).length()-1);
+				}
+				System.out.println(tempstr);
+				tempList.add(tempstr);
+				tempmap.put(num,tempstr);
+			}
+		}
+		//String str = tempmap.entrySet().stream().sorted(Comparator.comparingByValue(Comparator.reverseOrder()).thenComparing(Map.Entry::getKey)).map(Map.Entry::getKey).collect(Collectors.joining());
+
+		String str = tempmap.entrySet().stream().sorted(Map.Entry.<Integer, String> comparingByValue(Comparator.reverseOrder())
+				.thenComparing(Map.Entry.comparingByKey())).map(e->e.getKey().toString()).collect(Collectors.joining());
+		System.out.println(str);
+		return str;
+		/*
+		String answer = tempList.stream().sorted(Comparator.comparing((String n) -> n.split("")[0])
+				.thenComparing((String n)->n.length()>1?n.split("")[1]:n.split("")[n.length()-1])
+				.thenComparing((String n)->n.length()>2?n.split("")[2]:n.split("")[n.length()-1])
+				.thenComparing((String n)->n.length()>3?n.split("")[3]:n.split("")[n.length()-1])
+				.thenComparing((String n)->n.length(),Comparator.reverseOrder())
+				.reversed()
+		).collect(Collectors.joining());
+		System.out.println("answer : "+answer);
+
+
+		Arrays.stream(numbers).boxed().map(String::valueOf)
+			.sorted(Comparator.comparing((String n) -> n.split("")[0])
+				.thenComparing((String n)->n.length()>1?n.split("")[1]:n.split("")[n.length()-1])
+				.thenComparing((String n)->n.length()>2?n.split("")[2]:n.split("")[n.length()-1])
+				.thenComparing((String n)->n.length()>3?n.split("")[3]:n.split("")[n.length()-1])
+				.thenComparing((String n)->n.length(),Comparator.reverseOrder())
+				.reversed()
+			).collect(Collectors.joining());*/
+	}
+
+	// LV2. 행렬테두리 회전하기
+	public static int[] solution_matrix_rotation(int rows,int columns,int[][] queries){
+		int[] answer = new int[queries.length];
+		// 행렬 두개 만들기
+		int[][] matrix = new int[rows][columns];
+		int[][] temp = new int[rows][columns];
+		int num =1;
+		for(int i=0;i<rows;i++){
+			for(int j=0;j<columns;j++){
+				temp[i][j] = num;
+				matrix[i][j] = num;
+				num++;
+			}
+		}
+		print_matrix(matrix);
+		for(int i=0;i<queries.length;i++){
+			int x_pos = queries[i][1]-1, y_pos = queries[i][0]-1;
+			int min = rows * columns;
+			while(x_pos < queries[i][3]-1 || y_pos < queries[i][2]-1) {
+				if(matrix[y_pos][x_pos]<min) min = matrix[y_pos][x_pos];
+				if (x_pos < queries[i][3]-1) {
+					matrix[y_pos][x_pos+1] = temp[y_pos][x_pos];
+					x_pos++;
+				} else {
+					matrix[y_pos+1][x_pos] = temp[y_pos][x_pos];
+					y_pos++;
+				}
+			}
+			while(queries[i][1]-1 < x_pos || queries[i][0]-1 < y_pos) {
+				if(matrix[y_pos][x_pos]<min) min = matrix[y_pos][x_pos];
+				if (queries[i][1]-1 < x_pos) {
+					matrix[y_pos][x_pos-1] = temp[y_pos][x_pos];
+					x_pos--;
+				} else {
+					matrix[y_pos-1][x_pos] = temp[y_pos][x_pos];
+					y_pos--;
+				}
+			}
+			print_matrix(matrix);
+			for(int j=0; j<temp.length; j++){
+				System.arraycopy(matrix[i], 0, temp[i], 0, matrix[0].length);
+			}
+			answer[i] = min;
+		}
+
+        return answer;
+	}
+
+	public static void print_matrix(int[][] matrix){
+		System.out.println("--------------------------");
+		for(int i=0;i<matrix.length;i++){
+			for(int j=0;j<matrix[0].length;j++){
+				System.out.print(matrix[i][j]+"\t");
+			}
+			System.out.println();
+		}
 	}
 }
