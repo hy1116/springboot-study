@@ -211,5 +211,10 @@ public class ProgrammersControllerTest {
 	@Test
 	public void solution_matrix_rotation_test(){
 		assertThat(ProgrammersController.solution_matrix_rotation(6,6,new int[][]{{2, 2, 5, 4},{3, 3, 6, 6}, {5, 1, 6, 3}})).isEqualTo(new int[]{8,10,25});
+		assertThat(ProgrammersController.solution_matrix_rotation(3,5,new int[][]{{1,1,2,2},{2,3,3,4}, {1,2,3,4},{1,1,3,4},{2,2,3,5}})).isEqualTo(new int[]{1,8,1,1,3});
+		assertThat(ProgrammersController.solution_matrix_rotation(3,4,new int[][]{{1,1,2,2},{1,2,2,3}, {1,3,2,4},{2,2,3,4}})).isEqualTo(new int[]{1,1,1,4});
+		assertThat(ProgrammersController.solution_matrix_rotation(5,3,new int[][]{{2,1,3,3}})).isEqualTo(new int[]{4});
+		assertThat(ProgrammersController.solution_matrix_rotation(4,3,new int[][]{{1,2,3,3},{3,1,4,3}})).isEqualTo(new int[]{2,6});
+		assertThat(ProgrammersController.solution_matrix_rotation(100,97,new int[][]{{1,1,2,2},{1,1,2,2},{1,1,100,97}})).isEqualTo(new int[]{1,1,2});
 	}
 }

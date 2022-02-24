@@ -610,24 +610,21 @@ public class ProgrammersController {
 	// LV2. 행렬테두리 회전하기
 	public static int[] solution_matrix_rotation(int rows,int columns,int[][] queries){
 		int[][] matrix = new int[rows][columns];
-		int num =1;
-		for(int i=0;i<rows;i++){
-			for(int j=0;j<columns;j++){
-				matrix[i][j] = num++;
-			}
-		}
+		IntStream.range(0,rows)
+			.forEach(i->IntStream.range(0,columns)
+				.forEach(j-> matrix[i][j] = i*columns+j+1));
+
         return IntStream.range(0, queries.length)
-			.map(i -> rotate_matrix(rows,columns,matrix,queries[i]))
-			.toArray();
+			.map(i -> rotate_matrix(rows,columns,matrix,queries[i])).toArray();
 	}
 	public static int rotate_matrix(int rows,int columns,int[][] matrix,int[] query){
 		int[][] rota_matrix = new int[rows][columns];
-		IntStream.range(0,rota_matrix.length).forEach(a -> System.arraycopy(matrix[a],0,rota_matrix[a],0,matrix[a].length));
+		IntStream.range(0,rota_matrix.length)
+				.forEach(a -> System.arraycopy(matrix[a],0,rota_matrix[a],0,matrix[a].length));
 
-		int min = rows * columns;
-		int x_pos = query[1]-1, y_pos = query[0]-1;
+		/*
 		while(x_pos < query[3]-1 || y_pos < query[2]-1) {
-			if(matrix[y_pos][x_pos] < min) min = matrix[y_pos][x_pos];
+			if(rota_matrix[y_pos][x_pos] < min) min = rota_matrix[y_pos][x_pos];
 			if (x_pos < query[3]-1) {
 				matrix[y_pos][x_pos+1] = rota_matrix[y_pos][x_pos++];
 			} else {
@@ -635,13 +632,35 @@ public class ProgrammersController {
 			}
 		}
 		while(query[1]-1 < x_pos || query[0]-1 < y_pos) {
-			if(matrix[y_pos][x_pos] < min) min = matrix[y_pos][x_pos];
+			if(rota_matrix[y_pos][x_pos] < min) min = rota_matrix[y_pos][x_pos];
 			if (query[1]-1 < x_pos) {
 				matrix[y_pos][x_pos-1] = rota_matrix[y_pos][x_pos--];
 			} else {
 				matrix[y_pos-1][x_pos] = rota_matrix[y_pos--][x_pos];
 			}
 		}
+		*/
+		int min = 10000;
+		int x_pos = query[1]-1, y_pos = query[0]-1;
+		do{
+			if(x_pos < query[3]-1 || y_pos < query[2]-1) {
+				if(rota_matrix[y_pos][x_pos] < min) min = rota_matrix[y_pos][x_pos];
+				if (x_pos < query[3]-1) {
+					matrix[y_pos][x_pos+1] = rota_matrix[y_pos][x_pos++];
+				} else {
+					matrix[y_pos+1][x_pos] = rota_matrix[y_pos++][x_pos];
+				}
+			}
+			if(query[1]-1 < x_pos || query[0]-1 < y_pos) {
+				if(rota_matrix[y_pos][x_pos] < min) min = rota_matrix[y_pos][x_pos];
+				if (query[1]-1 < x_pos) {
+					matrix[y_pos][x_pos-1] = rota_matrix[y_pos][x_pos--];
+				} else {
+					matrix[y_pos-1][x_pos] = rota_matrix[y_pos--][x_pos];
+				}
+			}
+			System.out.println(">> x_pos : "+x_pos+" | y_pos : "+y_pos);
+		} while((x_pos < query[3]-1 || y_pos < query[2]-1) && (query[1]-1 < x_pos || query[0]-1 < y_pos));
 		print_matrix(matrix);
 		return min;
 	}
