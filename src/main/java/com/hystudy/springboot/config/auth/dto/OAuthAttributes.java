@@ -28,8 +28,9 @@ public class OAuthAttributes {
     public static OAuthAttributes of(String registrationId,String userNameAttributeName,Map<String,Object> attributes){
         if("naver".equals(registrationId)){
             return ofNaver("id",attributes);
+        }else if("kakao".equals(registrationId)){
+            return ofKaKao("id",attributes);
         }
-
         return ofGoogle(userNameAttributeName,attributes);
     }
 
@@ -52,7 +53,18 @@ public class OAuthAttributes {
                 .attributes(response)
                 .nameAttributeKey(userNameAttributeName)
                 .build();
+    }
 
+    public static OAuthAttributes ofKaKao(String userNameAttributeName,Map<String,Object> attributes){
+        Map<String,Object> kakao_account = (Map<String,Object>)attributes.get("kakao_account");
+        Map<String,Object> profile = (Map<String,Object>)kakao_account.get("profile");
+        return OAuthAttributes.builder()
+                .name((String) profile.get("nickname"))
+                .email((String) kakao_account.get("email"))
+                .picture((String) profile.get("profile_image_url"))
+                .attributes(attributes)
+                .nameAttributeKey(userNameAttributeName)
+                .build();
     }
 
     // 처음 가입시 생성 / 가입할 때의 기본권한 GUEST / 클래스 생성이 끝나면 같은 패키지의 SessionUser 클래스 생성

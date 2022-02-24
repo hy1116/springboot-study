@@ -13,6 +13,9 @@ var main = {
         $("#btn-delete").on('click',function(){
             _this.delete();
         });
+        $(".btn[class*='btn-outline']").on('hover'function(){
+            _this.addClass('active');
+        });
     },
     save : function(){
         var data = {
