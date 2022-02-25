@@ -197,7 +197,7 @@ public class ProgrammersControllerTest {
 
 	@Test
 	public void solution_jadenCase_test() {
-		assertThat(ProgrammersController.solution_jadenCase("3people unFollowed me")).isEqualTo("3people Unfollowed Me");
+		assertThat(ProgrammersController.solution_jadenCase("3people unFollowed me ")).isEqualTo("3people Unfollowed Me ");
 	}
 
 	@Test
@@ -216,5 +216,32 @@ public class ProgrammersControllerTest {
 		assertThat(ProgrammersController.solution_matrix_rotation(5,3,new int[][]{{2,1,3,3}})).isEqualTo(new int[]{4});
 		assertThat(ProgrammersController.solution_matrix_rotation(4,3,new int[][]{{1,2,3,3},{3,1,4,3}})).isEqualTo(new int[]{2,6});
 		assertThat(ProgrammersController.solution_matrix_rotation(100,97,new int[][]{{1,1,2,2},{1,1,2,2},{1,1,100,97}})).isEqualTo(new int[]{1,1,2});
+	}
+
+	@Test
+	public void test_test(){
+		assertThat(ProgrammersController.test()).isEqualTo("");
+	}
+
+	@Test
+	public void solution_expression_number_test(){
+		assertThat(ProgrammersController.solution_expression_number(15)).isEqualTo(4);
+	}
+
+	@Test
+	public void solution_fibonacci_test(){
+		assertThat(ProgrammersController.solution_fibonacci(3)).isEqualTo(2);
+	}
+
+	@Test
+	public void solution_next_max_int_test(){
+		assertThat(ProgrammersController.solution_next_max_int(78)).isEqualTo(83);
+		assertThat(ProgrammersController.solution_next_max_int(15)).isEqualTo(23);
+	}
+
+	@Test
+	public void solution_max_square_test(){
+		assertThat(ProgrammersController.solution_max_square(new int[][]{{0,1,1,1},{0,1,1,1},{1,1,1,1},{0,0,1,0}})).isEqualTo(9);
+		assertThat(ProgrammersController.solution_max_square(new int[][]{{0,0,1,1}, {1,1,1,1}})).isEqualTo(4);
 	}
 }

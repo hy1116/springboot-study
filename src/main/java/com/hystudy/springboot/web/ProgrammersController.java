@@ -602,9 +602,11 @@ public class ProgrammersController {
 
 	// LV2. JadenCase 문자열 만들기
 	public static String solution_jadenCase(String s) {
-		return Arrays.stream(s.split(" "))
-				.map(a -> a.split("")[0].toUpperCase()+a.substring(1).toLowerCase())
+		String answer =  Arrays.stream(s.split(" "))
+				.map(a -> a.length()!=0?a.split("")[0].toUpperCase()+a.substring(1).toLowerCase():"")
 				.collect(Collectors.joining(" "));
+		answer = " ".equals(s.substring(s.length()-1))?answer+" ":answer;
+		return answer;
 	}
 
 	// LV2. 행렬테두리 회전하기
@@ -618,11 +620,11 @@ public class ProgrammersController {
 			.map(i -> rotate_matrix(rows,columns,matrix,queries[i])).toArray();
 	}
 	public static int rotate_matrix(int rows,int columns,int[][] matrix,int[] query){
+		int min = 10000;
 		int[][] rota_matrix = new int[rows][columns];
 		IntStream.range(0,rota_matrix.length)
 				.forEach(a -> System.arraycopy(matrix[a],0,rota_matrix[a],0,matrix[a].length));
-
-		/*
+		int x_pos = query[1]-1, y_pos = query[0]-1;
 		while(x_pos < query[3]-1 || y_pos < query[2]-1) {
 			if(rota_matrix[y_pos][x_pos] < min) min = rota_matrix[y_pos][x_pos];
 			if (x_pos < query[3]-1) {
@@ -639,34 +641,12 @@ public class ProgrammersController {
 				matrix[y_pos-1][x_pos] = rota_matrix[y_pos--][x_pos];
 			}
 		}
-		*/
-		int min = 10000;
-		int x_pos = query[1]-1, y_pos = query[0]-1;
-		do{
-			if(x_pos < query[3]-1 || y_pos < query[2]-1) {
-				if(rota_matrix[y_pos][x_pos] < min) min = rota_matrix[y_pos][x_pos];
-				if (x_pos < query[3]-1) {
-					matrix[y_pos][x_pos+1] = rota_matrix[y_pos][x_pos++];
-				} else {
-					matrix[y_pos+1][x_pos] = rota_matrix[y_pos++][x_pos];
-				}
-			}
-			if(query[1]-1 < x_pos || query[0]-1 < y_pos) {
-				if(rota_matrix[y_pos][x_pos] < min) min = rota_matrix[y_pos][x_pos];
-				if (query[1]-1 < x_pos) {
-					matrix[y_pos][x_pos-1] = rota_matrix[y_pos][x_pos--];
-				} else {
-					matrix[y_pos-1][x_pos] = rota_matrix[y_pos--][x_pos];
-				}
-			}
-			System.out.println(">> x_pos : "+x_pos+" | y_pos : "+y_pos);
-		} while((x_pos < query[3]-1 || y_pos < query[2]-1) && (query[1]-1 < x_pos || query[0]-1 < y_pos));
-		print_matrix(matrix);
 		return min;
 	}
 
 	public static void print_matrix(int[][] matrix){
 		System.out.println("--------------------------");
+
 		for(int i=0;i<matrix.length;i++){
 			for(int j=0;j<matrix[0].length;j++){
 				System.out.print(matrix[i][j]+"\t");
@@ -684,4 +664,167 @@ public class ProgrammersController {
 		return answer.charAt(0)=='0'?"0":answer;
 	}
 
+	public static String test(){
+		int [][] temparr = new int[][]{{1,2},{1,2},{0,9,8,4,5,6}};
+		int[] newtemp = Arrays.stream(temparr).flatMap(a -> Arrays.stream(a).boxed()).sorted().mapToInt(b->b).toArray();
+		for(int i : newtemp){
+			System.out.println(i);
+		}
+
+		return "";
+	}
+
+	//LV2. 최솟값만들기
+	public int solution_make_min_value(int []A, int []B){
+		Arrays.sort(A);
+		Arrays.sort(B);
+		return IntStream.range(0,A.length).map(i->A[i]*B[B.length-i-1]).sum();
+	}
+
+	//LV2.최솟값과 최대값
+	public String solution_min_max_value(String s) {
+		int[] arr = Arrays.stream(s.split(" ")).map(Integer::valueOf).sorted().mapToInt(a->a).toArray();
+		return arr[0]+" "+arr[arr.length];
+	}
+
+	//LV2. 숫자의 표현
+	public static int solution_expression_number(int n) {
+		int answer = 1;
+
+		int s = 1,e = 2;
+		System.out.println(Math.sqrt(n));
+		System.out.println(Math.sqrt(20));
+		while(s < e){
+			int sum = 0;//IntStream.rangeClosed(s,e).sum();
+			for(int i=s;i<=e;i++) sum += i;
+			if(sum > n) s++;
+			else if(sum == n){
+				answer++;
+				s++;
+				e++;
+			}
+			else e++;
+		}
+
+		return answer;
+	}
+
+	//LV2. 피보나치 수
+	public static int solution_fibonacci(int n) {
+		List<Integer> fibo = new ArrayList<>();
+		fibo.add(0);
+		fibo.add(1);
+		while(fibo.size() <= n){
+			fibo.add(fibo.get(fibo.size()-2)%1234567+fibo.get(fibo.size()-1)%1234567);
+		}
+		return fibo.get(fibo.size()-1)%1234567;
+	}
+
+	//LV2. 다음 큰 숫자
+	public static int solution_next_max_int(int n) {
+		int answer = 0;
+		/*
+			조건 1. n의 다음 큰 숫자는 n보다 큰 자연수 입니다.
+			조건 2. n의 다음 큰 숫자와 n은 2진수로 변환했을 때 1의 갯수가 같습니다.
+			조건 3. n의 다음 큰 숫자는 조건 1, 2를 만족하는 수 중 가장 작은 수 입니다.
+			78(1001110) -> 83(1010011)
+		*/
+
+		int cnt = (int)Arrays.stream(Integer.toBinaryString(n).split("")).filter(a->"1".equals(a)).count();
+		while(0 < n++){
+			int cnt2 = (int)Arrays.stream(Integer.toBinaryString(n).split("")).filter(a->"1".equals(a)).count();
+			if(cnt==cnt2) break;
+		}
+		return n;
+	}
+
+	//LV2. 가장 큰 사각형 찾기
+	public static int solution_max_square(int [][]board) {
+		int answer = 1234;
+		List<int[]> zeroList = new ArrayList<>();
+		for(int i=0;i<board.length;i++){
+			for (int j=0;j<board[0].length;j++){
+				if(board[i][j] < 1){
+					zeroList.add(new int[]{i,j});
+				}
+			}
+		}
+		return 0;
+		/*
+		int max = 0;
+		for(int i=0;i<board.length;i++) {
+			for (int j = 0; j < board[0].length; j++) {
+				int m = (int)Math.pow(Math.min(Math.abs(zeroList.get(i)[0]-zeroList.get(i)[0]),Math.abs(zeroList.get(i)[1]-zeroList.get(i)[1])),2);
+				if(max < m) max = m;
+			}
+		}
+		return max;
+
+		 */
+		/*
+		int ymax = board.length;
+		int ymin = -1;
+		int xmax = board[0].length;
+		int xmin = -1;
+
+		ymax = zeroList.stream().mapToInt(a -> a[0]).max().getAsInt();
+		ymin = zeroList.stream().mapToInt(a -> a[0]).min().getAsInt();
+		xmax = zeroList.stream().filter(f-> ymin <= f[0] && f[0] <= ymax).mapToInt(a -> a[1]).max().getAsInt();
+		xmin = zeroList.stream().filter(f-> ymin <= f[0] && f[0] <= ymax).mapToInt(a -> a[1]).min().getAsInt();
+
+		System.out.println("xmax : "+(xmax==xmin?board.length:xmax));
+		System.out.println("xmin : "+xmin);
+		System.out.println("ymax : "+(ymax==ymin?board[0].length:ymax));
+		System.out.println("ymin : "+ymin);
+		return ((xmax==xmin?board.length:xmax)-xmin)*((ymax==ymin?board[0].length:ymax)-ymin)
+		*/
+	}
+
+	public int[] solution_coloringbook(int m, int n, int[][] picture) {
+		int numberOfArea = 0;
+		int maxSizeOfOneArea = 0;
+
+		int[] answer = new int[2];
+		answer[0] = numberOfArea;
+		answer[1] = maxSizeOfOneArea;
+
+		Map<Integer,List<int[]>> colormap = new HashMap<>();
+		for (int i=0;i<picture.length;i++) {
+			for (int j=0;j<picture[0].length;j++){
+				if(0 < picture[i][j]){
+					List<int[]> list = colormap.get(picture[i][j]);
+					list.add(new int[]{i,j});
+					colormap.put(picture[i][j],list);
+				}
+			}
+		}
+		for(Integer i : colormap.keySet()){
+			int area_cnt =1;//영역 갯수
+			int area_size=0;//영역 크기
+			Map<Integer,List<int[]>> newlist = new HashMap<>();
+			List<int[]> area = new ArrayList<>();
+			for(int k=0;k<colormap.get(i).size();k++){
+				List<int[]> poslist = colormap.get(i);
+				int[] poslist = colormap.get(i);
+				if(newlist.size()==0) area.add(new int[]{pos[0],pos[1]});
+				if(picture[pos[0]+1][pos[1]]==i){
+					area.add(new int[]{pos[0]+1,pos[1]});
+
+					colormap.get(i).remove(int[]{pos[0]+1,pos[1]});
+				}
+				if(picture[pos[0]-1][pos[1]]==i){
+					area.add(new int[]{pos[0]-1,pos[1]});
+				}
+				if(picture[pos[0]][pos[1]+1]==i){
+					area.add(new int[]{pos[0],pos[1]+1});
+				}
+				if(picture[pos[0]][pos[1]-1]==i){
+					area.add(new int[]{pos[0],pos[1]-1});
+				}
+
+			}
+		}
+
+		return answer;
+	}
 }
