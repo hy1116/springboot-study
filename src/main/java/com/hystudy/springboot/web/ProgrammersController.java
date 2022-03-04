@@ -412,7 +412,7 @@ public class ProgrammersController {
 		return answer;
 	}
 	//LV1. 예산
-	public int solution(int[] d, int budget) {
+	public int solution_budget(int[] d, int budget) {
 		Arrays.sort(d);
 		int idx = -1;
 		while (++idx < d.length){
@@ -612,35 +612,26 @@ public class ProgrammersController {
 	// LV2. 행렬테두리 회전하기
 	public static int[] solution_matrix_rotation(int rows,int columns,int[][] queries){
 		int[][] matrix = new int[rows][columns];
-		IntStream.range(0,rows)
-			.forEach(i->IntStream.range(0,columns)
-				.forEach(j-> matrix[i][j] = i*columns+j+1));
+		IntStream.range(0,rows).forEach(i->IntStream.range(0,columns).forEach(j-> matrix[i][j] = i*columns+j+1));
 
-        return IntStream.range(0, queries.length)
-			.map(i -> rotate_matrix(rows,columns,matrix,queries[i])).toArray();
+        return IntStream.range(0, queries.length).map(i -> rotate_matrix(rows,columns,matrix,queries[i])).toArray();
 	}
+
 	public static int rotate_matrix(int rows,int columns,int[][] matrix,int[] query){
 		int min = 10000;
-		int[][] rota_matrix = new int[rows][columns];
-		IntStream.range(0,rota_matrix.length)
-				.forEach(a -> System.arraycopy(matrix[a],0,rota_matrix[a],0,matrix[a].length));
+
+		int[][] copy_matrix = new int[rows][columns];
+		IntStream.range(0,copy_matrix.length).forEach(a -> System.arraycopy(matrix[a],0,copy_matrix[a],0,matrix[a].length));
+
 		int x_pos = query[1]-1, y_pos = query[0]-1;
-		while(x_pos < query[3]-1 || y_pos < query[2]-1) {
-			if(rota_matrix[y_pos][x_pos] < min) min = rota_matrix[y_pos][x_pos];
-			if (x_pos < query[3]-1) {
-				matrix[y_pos][x_pos+1] = rota_matrix[y_pos][x_pos++];
-			} else {
-				matrix[y_pos+1][x_pos] = rota_matrix[y_pos++][x_pos];
-			}
-		}
-		while(query[1]-1 < x_pos || query[0]-1 < y_pos) {
-			if(rota_matrix[y_pos][x_pos] < min) min = rota_matrix[y_pos][x_pos];
-			if (query[1]-1 < x_pos) {
-				matrix[y_pos][x_pos-1] = rota_matrix[y_pos][x_pos--];
-			} else {
-				matrix[y_pos-1][x_pos] = rota_matrix[y_pos--][x_pos];
-			}
-		}
+		do{
+			if(copy_matrix[y_pos][x_pos] < min) min = copy_matrix[y_pos][x_pos];
+			if 		(x_pos <  query[3]-1 && y_pos == query[0]-1) matrix[y_pos][x_pos+1] = copy_matrix[y_pos][x_pos++];
+			else if (x_pos == query[3]-1 && y_pos <  query[2]-1) matrix[y_pos+1][x_pos] = copy_matrix[y_pos++][x_pos];
+			else if (x_pos >  query[1]-1 && y_pos == query[2]-1) matrix[y_pos][x_pos-1] = copy_matrix[y_pos][x_pos--];
+			else if (x_pos == query[1]-1 && y_pos >= query[0]-1) matrix[y_pos-1][x_pos] = copy_matrix[y_pos--][x_pos];
+		}while((query[1]-1 < x_pos && x_pos <= query[3]-1) || (query[0]-1 < y_pos && y_pos <= query[2]-1));
+
 		return min;
 	}
 
@@ -723,13 +714,6 @@ public class ProgrammersController {
 	//LV2. 다음 큰 숫자
 	public static int solution_next_max_int(int n) {
 		int answer = 0;
-		/*
-			조건 1. n의 다음 큰 숫자는 n보다 큰 자연수 입니다.
-			조건 2. n의 다음 큰 숫자와 n은 2진수로 변환했을 때 1의 갯수가 같습니다.
-			조건 3. n의 다음 큰 숫자는 조건 1, 2를 만족하는 수 중 가장 작은 수 입니다.
-			78(1001110) -> 83(1010011)
-		*/
-
 		int cnt = (int)Arrays.stream(Integer.toBinaryString(n).split("")).filter(a->"1".equals(a)).count();
 		while(0 < n++){
 			int cnt2 = (int)Arrays.stream(Integer.toBinaryString(n).split("")).filter(a->"1".equals(a)).count();
@@ -780,7 +764,8 @@ public class ProgrammersController {
 		*/
 	}
 
-	public int[] solution_coloringbook(int m, int n, int[][] picture) {
+	// LV2. 컬러링북
+	public static int[] solution_coloringbook(int m, int n, int[][] picture) {
 		int numberOfArea = 0;
 		int maxSizeOfOneArea = 0;
 
@@ -790,39 +775,148 @@ public class ProgrammersController {
 
 		Map<Integer,List<int[]>> colormap = new HashMap<>();
 		for (int i=0;i<picture.length;i++) {
+			List<int[]> list = new ArrayList<>();
 			for (int j=0;j<picture[0].length;j++){
 				if(0 < picture[i][j]){
-					List<int[]> list = colormap.get(picture[i][j]);
+					if(colormap.get(picture[i][j]) != null && !colormap.get(picture[i][j]).isEmpty()){
+						list = colormap.get(picture[i][j]);
+					}
 					list.add(new int[]{i,j});
 					colormap.put(picture[i][j],list);
 				}
 			}
 		}
 		for(Integer i : colormap.keySet()){
+			System.out.println(i+" : ");
+			for(int[] pos : colormap.get(i)){
+				System.out.println("{"+pos[0]+","+pos[1]+"}");
+			}
+		}
+		for(Integer i : colormap.keySet()){
 			int area_cnt =1;//영역 갯수
 			int area_size=0;//영역 크기
-			Map<Integer,List<int[]>> newlist = new HashMap<>();
+			Map<String,List<int[]>> newlist = new HashMap<>();
 			List<int[]> area = new ArrayList<>();
 			for(int k=0;k<colormap.get(i).size();k++){
-				List<int[]> poslist = colormap.get(i);
-				int[] poslist = colormap.get(i);
-				if(newlist.size()==0) area.add(new int[]{pos[0],pos[1]});
-				if(picture[pos[0]+1][pos[1]]==i){
+				int[] pos = colormap.get(i).get(k);
+				System.out.println("{"+pos[0]+","+pos[1]+"}");
+				if(newlist.size()==0){
+					area.add(new int[]{pos[0],pos[1]});
+					colormap.get(i).remove(colormap.get(i).indexOf(new int[]{pos[0]+1,pos[1]}));
+				}
+				/*
+				if(pos[0] < n && picture[pos[0]+1][pos[1]]==i){
 					area.add(new int[]{pos[0]+1,pos[1]});
-
-					colormap.get(i).remove(int[]{pos[0]+1,pos[1]});
+					//colormap.get(i).remove(colormap.get(i).indexOf(new int[]{pos[0]+1,pos[1]}));
 				}
-				if(picture[pos[0]-1][pos[1]]==i){
+				if(0 < pos[0] && picture[pos[0]-1][pos[1]]==i){
 					area.add(new int[]{pos[0]-1,pos[1]});
+					//colormap.get(i).remove(colormap.get(i).indexOf(new int[]{pos[0]-1,pos[1]}));
 				}
-				if(picture[pos[0]][pos[1]+1]==i){
+				if(pos[1] < m && picture[pos[0]][pos[1]+1]==i){
 					area.add(new int[]{pos[0],pos[1]+1});
+					//colormap.get(i).remove(colormap.get(i).indexOf(new int[]{pos[0],pos[1]+1}));
 				}
-				if(picture[pos[0]][pos[1]-1]==i){
+				if(0 < pos[1] && picture[pos[0]][pos[1]-1]==i){
 					area.add(new int[]{pos[0],pos[1]-1});
+					//colormap.get(i).remove(colormap.get(i).indexOf(new int[]{pos[0],pos[1]-1}));
 				}
-
+				*/
 			}
+		}
+
+		return answer;
+	}
+
+	//LV2. 행렬의 곱셈
+	public static int[][] solution_matrix_multiple(int[][] arr1, int[][] arr2) {
+		int[][] answer = new int[arr1.length][arr2[0].length];
+		for(int i=0;i<arr1.length;i++){
+			for(int j=0;j<arr2[0].length;j++){
+				answer[i][j] = 0;
+				for(int k=0;k<arr2.length;k++){
+					System.out.println("i : " +i+" | j : "+j+" | k : "+k);
+					answer[i][j] += (arr1[i][k]*arr2[k][j]);
+				}
+			}
+		}
+		return answer;
+	}
+
+	//LV2. 영어로 끝말잇기
+	public static int[] solution_english_word_chain_game(int n, String[] words) {
+		int cnt = 0;
+		String prev_word = words[0];
+		while(++cnt < words.length){
+			if(prev_word.charAt(prev_word.length()-1)!=words[cnt].charAt(0)) break;
+			if(0 <= Arrays.asList(words).indexOf(words[cnt]) && Arrays.asList(words).indexOf(words[cnt]) < cnt) break;
+			prev_word = words[cnt];
+		}
+		if(words.length <= cnt) return new int[]{0,0};
+		return new int[]{cnt%n+1,cnt/n+1};
+	}
+
+	//LV2. 타켓넘버
+	public static int solution_target_number(int[] numbers, int target) {
+		int answer = 0;
+		int cnt = -1;
+		while(++cnt < Math.pow(2,numbers.length)){
+			String bi = Integer.toBinaryString(cnt);
+			int result_number = 0;
+			for(int i=0;i<numbers.length;i++){
+				if(i < numbers.length-bi.length()) result_number += numbers[i];
+				else if(bi.charAt(i-(numbers.length-bi.length()))=='1') result_number -= numbers[i];
+				else result_number += numbers[i];
+			}
+			if(result_number==target) answer++;
+		}
+		return answer;
+	}
+
+	//LV2. 올바른 괄호 : 효율성 통과 못함 ㅅㅂ
+	public static boolean solution_correct_bracket(String s) {
+		while(-1 < s.indexOf("()")) s = s.replaceAll("\\(\\)","");
+		return 0 < s.length()?false:true;
+	}
+
+	//LV2. 땅따먹기
+	public static int solution_eat_the_ground(int[][] land) {
+		int answer = 0;
+		/*
+		int pre_col = -1;
+		for(int i=0;i<land.length;i++){
+			int max = 0;
+			int col = -1;
+			for(int j=0;j<land[i].length;j++){
+				if(pre_col != j && max < land[i][j]) max = land[i][j];
+				col = j;
+			}
+			System.out.println(max);
+			pre_col = col;
+			answer += max;
+		}
+		*/
+		Map<Integer,Integer> map = new LinkedHashMap<>();
+		for(int i=0;i<land.length;i++){
+			map.put(i,Arrays.stream(land[i]).max().getAsInt());
+		}
+		map.entrySet().stream().sorted(Comparator.comparing(Map.Entry::getKey));
+		for(int k : map.keySet()){
+			for(int i=0;i<land.length;i++){
+				if(map.get(k)==land[k][i]){
+					if(k+1 < land.length) land[k+1][i] = 0;
+					if(0 < k-1) land[k-1][i] = 0;
+				}
+			}
+		}
+		for(int i=0;i<land.length;i++){
+			for(int j=0;j<land[i].length;j++){
+				System.out.print(land[i][j]+"\t");
+			}
+			System.out.println();
+		}
+		for(int i=0;i<land.length;i++){
+			answer += Arrays.stream(land[i]).max().getAsInt();
 		}
 
 		return answer;
