@@ -902,10 +902,12 @@ public class ProgrammersController {
 		}
 		map.entrySet().stream().sorted(Comparator.comparing(Map.Entry::getKey));
 		for(int k : map.keySet()){
-			for(int i=0;i<land.length;i++){
+			for(int i=0;i<=land.length;i++){
+				System.out.println("k : "+k+" | i : "+i);
 				if(map.get(k)==land[k][i]){
+					System.out.println(k);
+					if(0 <= k-1) land[k-1][i] = 0;
 					if(k+1 < land.length) land[k+1][i] = 0;
-					if(0 < k-1) land[k-1][i] = 0;
 				}
 			}
 		}
@@ -918,6 +920,31 @@ public class ProgrammersController {
 		for(int i=0;i<land.length;i++){
 			answer += Arrays.stream(land[i]).max().getAsInt();
 		}
+
+		return answer;
+	}
+
+	//LV2.이진변환 반복하기
+	public static int[] solution_repeat_binary(String s) {
+		int[] answer = new int[2];
+		answer[0] = 0;
+		answer[1] = 0;
+		while (s.length() > 1){
+			answer[0]++;
+			answer[1] += Arrays.stream(s.split("")).filter(a->"0".equals(a)).count();
+			s = Integer.toBinaryString(s.replace("0","").length());
+		}
+		return answer;
+	}
+	//LV2. 예상 대진표
+	public static int solution_expect_tournament(int n, int a, int b) {
+		int answer = 0;
+		if(a > b){
+			int tmp = b;
+			b=a;
+			a=tmp;
+		}
+		answer = b-a;
 
 		return answer;
 	}

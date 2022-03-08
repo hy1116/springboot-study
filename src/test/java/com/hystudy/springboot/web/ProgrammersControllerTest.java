@@ -276,4 +276,15 @@ public class ProgrammersControllerTest {
 	public void solution_eat_the_ground_test(){
 		assertThat(ProgrammersController.solution_eat_the_ground(new int[][]{{1, 2, 3, 5}, {5, 6, 7, 18}, {4, 3, 2, 1}})).isEqualTo(25);
 	}
+
+	@Test
+	public void solution_repeat_binary_test(){
+		assertThat(ProgrammersController.solution_repeat_binary("110010101001")).isEqualTo(new int[]{3,8});
+		assertThat(ProgrammersController.solution_repeat_binary("1111111")).isEqualTo(new int[]{4,1});
+	}
+
+	@Test
+	public void solution_expect_tournament_test(){
+		assertThat(ProgrammersController.solution_expect_tournament(8, 4, 7)).isEqualTo(3);
+	}
 }
