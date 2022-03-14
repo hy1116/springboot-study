@@ -285,6 +285,12 @@ public class ProgrammersControllerTest {
 
 	@Test
 	public void solution_expect_tournament_test(){
+		assertThat(ProgrammersController.solution_expect_tournament(4, 1, 4)).isEqualTo(2);
 		assertThat(ProgrammersController.solution_expect_tournament(8, 4, 7)).isEqualTo(3);
+		assertThat(ProgrammersController.solution_expect_tournament(8, 1, 2)).isEqualTo(1);
+		assertThat(ProgrammersController.solution_expect_tournament(8, 2, 3)).isEqualTo(2);
+		assertThat(ProgrammersController.solution_expect_tournament(16, 1, 16)).isEqualTo(4);
+		assertThat(ProgrammersController.solution_expect_tournament(16, 8, 9)).isEqualTo(4);
+		assertThat(ProgrammersController.solution_expect_tournament(16, 9, 12)).isEqualTo(2);
 	}
 }

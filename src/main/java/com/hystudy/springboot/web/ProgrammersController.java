@@ -938,14 +938,16 @@ public class ProgrammersController {
 	}
 	//LV2. 예상 대진표
 	public static int solution_expect_tournament(int n, int a, int b) {
-		int answer = 0;
-		if(a > b){
-			int tmp = b;
-			b=a;
-			a=tmp;
+		int answer = (int)Math.floor(Math.log(n)/Math.log(2));
+		while(1 < n){
+			n /= 2;
+			if(Math.min(a,b) <= n && Math.max(a,b) > n) break;
+			if(Math.max(a,b) > n && Math.min(a,b) > n){
+				a -= n;
+				b -= n;
+			}
+			answer--;
 		}
-		answer = b-a;
-
 		return answer;
 	}
 }
