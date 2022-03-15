@@ -939,15 +939,64 @@ public class ProgrammersController {
 	//LV2. 예상 대진표
 	public static int solution_expect_tournament(int n, int a, int b) {
 		int answer = (int)Math.floor(Math.log(n)/Math.log(2));
-		while(1 < n){
+		while(Math.min(a,b) > n/2 || Math.max(a,b) <= n/2){
 			n /= 2;
-			if(Math.min(a,b) <= n && Math.max(a,b) > n) break;
+			answer--;
 			if(Math.max(a,b) > n && Math.min(a,b) > n){
 				a -= n;
 				b -= n;
 			}
-			answer--;
 		}
+		return answer;
+	}
+
+	//LV2. 주식가격
+	public static int[] solution_stock_price(int[] prices) {
+		int[] answer = new int[prices.length];
+		for(int i=0;i<prices.length;i++){
+			int cnt = 0;
+			for(int j=i+1;j<prices.length;j++){
+				cnt++;
+				if(prices[j] < prices[i]) break;
+			}
+			answer[i] = cnt;
+		}
+		return answer;
+	}
+
+	//LV2.n^2배열 자르기
+	public static int[] solution_slice_array(int n, long left, long right) {
+		/*
+		int[][] arr = new int[n][n];
+		IntStream.range(0,n).forEach(i -> IntStream.range(0,n).forEach(j-> arr[i][j] = Math.max(i,j)+1));
+		int[] temparr = Arrays.stream(arr).flatMap(a -> Arrays.stream(a).boxed()).mapToInt(b->b).toArray();
+		int[] answer = new int[right-left+1];
+		for(long i=left;i<=right;i++){
+			temparr[i];
+		}
+		*/
+		int[] answer = new int[(int)(right-left+1)];
+		int idx = 0;
+		for(long i = (long)Math.floor(left/n);i<=Math.floor(right/n);i++){
+			for(long j = 0;j<n;j++){
+				if(left <= i*n+j && i*n+j <= right){
+					answer[idx++] = (int)Math.max(i,j)+1;
+				}
+			}
+		}
+		return answer;
+	}
+
+	//LV2. 모음사전
+	enum vowel{A,E,I,O,U};
+	public static int solution_vowel_dictionary(String word) {
+		int answer = 0;
+		String[] strarr = word.split("");
+		for (int i=0;i<5;i++) {
+			if(strarr.length <= i) continue;
+			else answer += vowel.valueOf(strarr[i]).ordinal()*Math.pow(6,4-i)+1;
+		}
+		//if(strarr.length < 5) answer -= Math.pow(6,4-strarr.length);
 		return answer;
 	}
 }

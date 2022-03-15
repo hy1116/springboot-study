@@ -293,4 +293,22 @@ public class ProgrammersControllerTest {
 		assertThat(ProgrammersController.solution_expect_tournament(16, 8, 9)).isEqualTo(4);
 		assertThat(ProgrammersController.solution_expect_tournament(16, 9, 12)).isEqualTo(2);
 	}
+
+	@Test
+	public void solution_stock_price_test(){
+		assertThat(ProgrammersController.solution_stock_price(new int[]{1, 2, 3, 2, 3})).isEqualTo(new int[]{4, 3, 1, 1, 0});
+	}
+
+	@Test
+	public void solution_slice_array_test(){
+		assertThat(ProgrammersController.solution_slice_array(3,2,5)).isEqualTo(new int[]{3,2,2,3});
+	}
+
+	@Test
+	public void solution_vowel_dictionary_test(){
+		assertThat(ProgrammersController.solution_vowel_dictionary("AAAAE")).isEqualTo(6);
+		assertThat(ProgrammersController.solution_vowel_dictionary("AAAE")).isEqualTo(10);
+		assertThat(ProgrammersController.solution_vowel_dictionary("EIO")).isEqualTo(1189);
+		assertThat(ProgrammersController.solution_vowel_dictionary("I")).isEqualTo(1563);
+	}
 }
