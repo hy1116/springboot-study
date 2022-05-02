@@ -306,9 +306,39 @@ public class ProgrammersControllerTest {
 
 	@Test
 	public void solution_vowel_dictionary_test(){
+		assertThat(ProgrammersController.solution_vowel_dictionary("A")).isEqualTo(1);
+		assertThat(ProgrammersController.solution_vowel_dictionary("AAAEA")).isEqualTo(11);
 		assertThat(ProgrammersController.solution_vowel_dictionary("AAAAE")).isEqualTo(6);
-		assertThat(ProgrammersController.solution_vowel_dictionary("AAAE")).isEqualTo(10);
-		assertThat(ProgrammersController.solution_vowel_dictionary("EIO")).isEqualTo(1189);
+		assertThat(ProgrammersController.solution_vowel_dictionary("AAAIA")).isEqualTo(17);
+		assertThat(ProgrammersController.solution_vowel_dictionary("AAAI")).isEqualTo(16);
+		assertThat(ProgrammersController.solution_vowel_dictionary("AAEI")).isEqualTo(47);
 		assertThat(ProgrammersController.solution_vowel_dictionary("I")).isEqualTo(1563);
+		assertThat(ProgrammersController.solution_vowel_dictionary("IA")).isEqualTo(1564);
+		assertThat(ProgrammersController.solution_vowel_dictionary("IAA")).isEqualTo(1565);
+		assertThat(ProgrammersController.solution_vowel_dictionary("EIO")).isEqualTo(1189);
+		assertThat(ProgrammersController.solution_vowel_dictionary("AAAE")).isEqualTo(10);
+	}
+
+	@Test
+	public void solution_h_index_test(){
+		assertThat(ProgrammersController.solution_h_index(new int[]{3, 0, 6, 1, 5})).isEqualTo(3);
+	}
+
+	@Test
+		public void solution_phonebook(){
+		assertThat(ProgrammersController.solution_phonebook(new String[]{"119", "97674223", "1195524421"})).isEqualTo(false);
+		assertThat(ProgrammersController.solution_phonebook(new String[]{"123","456","789"})).isEqualTo(true);
+	}
+
+	@Test
+	public void solution_pair_remove(){
+		assertThat(ProgrammersController.solution_pair_remove("baabaa")).isEqualTo(1);
+		assertThat(ProgrammersController.solution_pair_remove("cdcd")).isEqualTo(0);
+	}
+
+	@Test
+	public void solution_printer(){
+		assertThat(ProgrammersController.solution_printer(new int[]{1, 1, 9, 1, 1, 1},0)).isEqualTo(5);
+		assertThat(ProgrammersController.solution_printer(new int[]{2, 1, 3, 2},2)).isEqualTo(1);
 	}
 }

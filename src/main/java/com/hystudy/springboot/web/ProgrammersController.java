@@ -1,11 +1,14 @@
 package com.hystudy.springboot.web;
 
+import org.springframework.security.core.parameters.P;
+
 import java.math.BigInteger;
 import java.util.*;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 public class ProgrammersController {
 	// Lv.1 신고 결과 받기
@@ -714,9 +717,9 @@ public class ProgrammersController {
 	//LV2. 다음 큰 숫자
 	public static int solution_next_max_int(int n) {
 		int answer = 0;
-		int cnt = (int)Arrays.stream(Integer.toBinaryString(n).split("")).filter(a->"1".equals(a)).count();
+		int cnt = Integer.toBinaryString(n).replace("0","").length();
 		while(0 < n++){
-			int cnt2 = (int)Arrays.stream(Integer.toBinaryString(n).split("")).filter(a->"1".equals(a)).count();
+			int cnt2 = Integer.toBinaryString(n).replace("0","").length();
 			if(cnt==cnt2) break;
 		}
 		return n;
@@ -875,8 +878,22 @@ public class ProgrammersController {
 
 	//LV2. 올바른 괄호 : 효율성 통과 못함 ㅅㅂ
 	public static boolean solution_correct_bracket(String s) {
-		while(-1 < s.indexOf("()")) s = s.replaceAll("\\(\\)","");
-		return 0 < s.length()?false:true;
+		int i=0;
+		Stack<Character> stack = new Stack<>();
+		while(i<s.length()){
+			char c = s.charAt(i++);
+			if(stack.empty()){
+				if('('==c) stack.push(c);
+				else return false;
+			}
+			else if('('==c) stack.push(c);
+			else if(')'==c){
+				if('('==stack.peek()) stack.pop();
+				else return false;
+			}
+			else return false;
+		}
+		return stack.empty()?true:false;
 	}
 
 	//LV2. 땅따먹기
@@ -991,12 +1008,91 @@ public class ProgrammersController {
 	enum vowel{A,E,I,O,U};
 	public static int solution_vowel_dictionary(String word) {
 		int answer = 0;
-		String[] strarr = word.split("");
-		for (int i=0;i<5;i++) {
-			if(strarr.length <= i) continue;
-			else answer += vowel.valueOf(strarr[i]).ordinal()*Math.pow(6,4-i)+1;
+		int[] jump = new int[5];
+		for(int i=0;i<5;i++){
+			jump[i] = (int)Math.pow(5,i) + (i-1<0?0:jump[i-1]);
 		}
-		//if(strarr.length < 5) answer -= Math.pow(6,4-strarr.length);
+		String[] strarr = word.split("");
+		for (int i=0;i<strarr.length;i++) {
+			answer += vowel.valueOf(strarr[i]).ordinal()*jump[4-i] + 1;
+		}
 		return answer;
 	}
+
+	//LV2. H-index
+	public static int solution_h_index(int[] citations) {
+		int[] first = Arrays.stream(citations).boxed().sorted(Comparator.reverseOrder())
+				.filter(i -> i <= Arrays.stream(citations).filter(f->i<=f).count())
+				.mapToInt(m->m).toArray();
+
+		return Arrays.stream(first).filter(i -> Arrays.stream(first).filter(f->i<f).count() == 0).findFirst().getAsInt();
+	}
+
+	// LV2. 전화번호부
+	public static boolean solution_phonebook(String[] phone_book) {
+		boolean answer = true;
+		/*
+		for(int i=0;i< phone_book.length-1;i++){
+			for(int j=i+1;j< phone_book.length;j++) {
+				if (phone_book[i].startsWith(phone_book[j]) || phone_book[j].startsWith(phone_book[i])) {
+					answer = false;
+					break;
+				}
+			}
+		}
+		*/
+		PriorityQueue<String> queue = Arrays.stream(phone_book).collect(Collectors.toCollection(PriorityQueue::new));
+		//HashSet<String> hash = (HashSet<String>) Arrays.stream(phone_book).collect(Collectors.toSet());
+		while(1 < queue.size()){
+			String str = queue.poll();
+			if(str.startsWith(queue.peek())||queue.peek().startsWith(str)){
+				answer = false;
+				break;
+			}
+		}
+		return answer;
+	}
+
+	//LV2. 짝지어 제거하기
+	public static int solution_pair_remove(String s){
+		//int answer = -1;
+		String[] stringarr = s.split("");
+		Stack<String> st = new Stack<>();
+		for(String str :stringarr ){
+			if(st.size()!=0&&str.equals(st.peek())){
+				st.pop();
+			}else if(st.size()>stringarr.length/2){
+				return 0;
+			}else{
+				st.push(str);
+			}
+		}
+		return st.size()==0?1:0;
+	}
+
+	//LV2. 프린터
+	public static int solution_printer(int[] priorities, int location) {
+		LinkedList<Integer> list = new LinkedList<Integer>();
+		for(int i : priorities) list.add(new Integer(i));
+
+		Integer idx = list.get(location);
+		int cnt = 1;
+		while(0 < list.size()){
+			boolean flag = false;
+			Integer i = list.pollFirst();
+			for(Integer i2 : list){
+				if(i2.compareTo(i) > 0){
+					flag = true;
+					break;
+				}
+			}
+			if(flag) list.addLast(i);
+			else{
+				if(i == idx) break;
+				cnt++;
+			}
+		}
+		return cnt;
+	}
+
 }
