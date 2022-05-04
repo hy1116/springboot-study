@@ -1095,4 +1095,108 @@ public class ProgrammersController {
 		return cnt;
 	}
 
+	//LV2. 다리를 지나가는 트럭
+	public static int solution_truck(int bridge_length, int weight, int[] truck_weights) {
+		int answer = 1;
+
+		Queue<Integer> bridgeQ = new LinkedList<>();
+		int idx = 1;
+		for(int i=0;i<bridge_length-1;i++) bridgeQ.add(0);
+
+		int bridgeW = truck_weights[0];
+		bridgeQ.add(truck_weights[0]);
+		while(0 < bridgeW){
+			bridgeW -= bridgeQ.poll();
+
+			if(idx < truck_weights.length && bridgeW + truck_weights[idx] <= weight){
+				bridgeW += truck_weights[idx];
+				bridgeQ.add(truck_weights[idx]);
+				idx++;
+			} else{
+				bridgeQ.add(0);
+			}
+			answer++;
+		}
+		return answer;
+	}
+	//lv2. 위장
+	public static int solution_camouflage(String[][] clothes) {
+		int answer = 1;
+
+		Map<String,Integer> list = new HashMap<>();
+		for (String[] s1 : clothes){
+			if(list.containsKey(s1[1])) list.put(s1[1],list.get(s1[1])+1);
+			else list.put(s1[1],1);
+		}
+		for(String s : list.keySet()){
+			answer *= list.get(s)+1;
+		}
+		return answer-1;
+	}
+	//LV2. 카펫
+	public static int[] solution_carpet(int brown, int yellow) {
+		int idx = IntStream.rangeClosed(1,(int)Math.sqrt(yellow))
+				.filter(i -> yellow % i == 0)
+				.findFirst().getAsInt();
+		return new int[]{yellow/idx+2,idx+2};
+	}
+	//LV2. 스킬트리
+	public static int solution_skillTree(String skill, String[] skill_trees) {
+		return (int)Arrays.stream(skill_trees)
+				.filter(s->skill.startsWith(s.replaceAll("[^"+skill+"]","")))
+				.count();
+	}
+	//============================================================================
+
+	//LV2. 코스요리
+	public static String[] solution_course(String[] orders, int[] course) {
+		String[] answer = {};
+		for(int i :course){
+			for (String str : orders){
+				str.split("");
+			}
+		}
+		return answer;
+	}
+	//LV2. 구명보트
+	public static int solution_rescue_boat(int[] people, int limit) {
+		int answer = people.length;
+
+		LinkedList<Integer> q = Arrays.stream(people).boxed().sorted().collect(Collectors.toCollection(LinkedList::new));
+		int weight = 0;
+		while(0 < q.size()){
+			weight += q.poll();
+			for(int i=0;i<q.size();i++){
+				if(q.get(i)+weight <= limit){
+					q.remove(i);
+					answer--;
+				}
+			}
+		}
+		return answer;
+	}
+	//LV2. 피로도
+	public static int solution_fatigue(int k, int[][] dungeons) {
+		int answer = 0;
+
+		List<int[]> list = Arrays.stream(dungeons).collect(Collectors.toList());
+
+		int idx = 0;
+		while(idx < dungeons.length){
+			if(k < list.get(idx)[0]){
+				int[] temp = list.get(idx);
+				list.set(idx,list.get(idx-1));
+				list.set(idx-1,temp);
+				idx = 0;
+				answer = 0;
+				continue;
+			} else{
+				answer++;
+				idx++;
+			}
+			k -= list.get(idx-1)[1];
+		}
+
+		return answer;
+	}
 }

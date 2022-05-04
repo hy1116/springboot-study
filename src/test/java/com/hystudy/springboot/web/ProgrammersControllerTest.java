@@ -337,8 +337,40 @@ public class ProgrammersControllerTest {
 	}
 
 	@Test
-	public void solution_printer(){
-		assertThat(ProgrammersController.solution_printer(new int[]{1, 1, 9, 1, 1, 1},0)).isEqualTo(5);
-		assertThat(ProgrammersController.solution_printer(new int[]{2, 1, 3, 2},2)).isEqualTo(1);
+	public void solution_truck(){
+		assertThat(ProgrammersController.solution_truck(2,10,new int[]{7,4,5,6})).isEqualTo(8);
+		assertThat(ProgrammersController.solution_truck(100,100,new int[]{10,10,10,10,10,10,10,10,10,10})).isEqualTo(110);
+	}
+
+	@Test
+	public void solution_camouflage(){
+		assertThat(ProgrammersController.solution_camouflage(new String[][]{{"yellowhat", "headgear"}, {"bluesunglasses", "eyewear"}, {"green_turban", "headgear"}})).isEqualTo(5);
+	}
+
+	@Test
+	public void solution_carpet(){
+		assertThat(ProgrammersController.solution_carpet(10,2)).isEqualTo(new int[]{4,3});
+	}
+
+	@Test
+	public void solution_skillTree(){
+		assertThat(ProgrammersController.solution_skillTree("CBD",new String[]{"BACDE", "CBADF", "AECB", "BDA","AC","CA"})).isEqualTo(4);
+	}
+	//======================================================================================
+
+	@Test
+	public void solution_course(){
+		assertThat(ProgrammersController.solution_course(new String[]{"ABCFG", "AC", "CDE", "ACDE", "BCFG", "ACDEH"},new int[]{2,3,4})).isEqualTo(new String[]{"AC", "ACDE", "BCFG", "CDE"});
+	}
+
+	@Test
+	public void solution_rescue_boat(){
+		assertThat(ProgrammersController.solution_rescue_boat(new int[]{70, 50, 80, 50},100)).isEqualTo(3);
+		assertThat(ProgrammersController.solution_rescue_boat(new int[]{70, 80, 50},100)).isEqualTo(3);
+	}
+
+	@Test
+	public void solution_fatigue(){
+		assertThat(ProgrammersController.solution_fatigue(80,new int[][]{{80,20},{50,30},{30,10}})).isEqualTo(3);
 	}
 }
