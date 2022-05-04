@@ -1,14 +1,11 @@
 package com.hystudy.springboot.web;
 
-import org.springframework.security.core.parameters.P;
-
 import java.math.BigInteger;
 import java.util.*;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
 public class ProgrammersController {
 	// Lv.1 신고 결과 받기
@@ -737,34 +734,6 @@ public class ProgrammersController {
 			}
 		}
 		return 0;
-		/*
-		int max = 0;
-		for(int i=0;i<board.length;i++) {
-			for (int j = 0; j < board[0].length; j++) {
-				int m = (int)Math.pow(Math.min(Math.abs(zeroList.get(i)[0]-zeroList.get(i)[0]),Math.abs(zeroList.get(i)[1]-zeroList.get(i)[1])),2);
-				if(max < m) max = m;
-			}
-		}
-		return max;
-
-		 */
-		/*
-		int ymax = board.length;
-		int ymin = -1;
-		int xmax = board[0].length;
-		int xmin = -1;
-
-		ymax = zeroList.stream().mapToInt(a -> a[0]).max().getAsInt();
-		ymin = zeroList.stream().mapToInt(a -> a[0]).min().getAsInt();
-		xmax = zeroList.stream().filter(f-> ymin <= f[0] && f[0] <= ymax).mapToInt(a -> a[1]).max().getAsInt();
-		xmin = zeroList.stream().filter(f-> ymin <= f[0] && f[0] <= ymax).mapToInt(a -> a[1]).min().getAsInt();
-
-		System.out.println("xmax : "+(xmax==xmin?board.length:xmax));
-		System.out.println("xmin : "+xmin);
-		System.out.println("ymax : "+(ymax==ymin?board[0].length:ymax));
-		System.out.println("ymin : "+ymin);
-		return ((xmax==xmin?board.length:xmax)-xmin)*((ymax==ymin?board[0].length:ymax)-ymin)
-		*/
 	}
 
 	// LV2. 컬러링북
@@ -807,24 +776,6 @@ public class ProgrammersController {
 					area.add(new int[]{pos[0],pos[1]});
 					colormap.get(i).remove(colormap.get(i).indexOf(new int[]{pos[0]+1,pos[1]}));
 				}
-				/*
-				if(pos[0] < n && picture[pos[0]+1][pos[1]]==i){
-					area.add(new int[]{pos[0]+1,pos[1]});
-					//colormap.get(i).remove(colormap.get(i).indexOf(new int[]{pos[0]+1,pos[1]}));
-				}
-				if(0 < pos[0] && picture[pos[0]-1][pos[1]]==i){
-					area.add(new int[]{pos[0]-1,pos[1]});
-					//colormap.get(i).remove(colormap.get(i).indexOf(new int[]{pos[0]-1,pos[1]}));
-				}
-				if(pos[1] < m && picture[pos[0]][pos[1]+1]==i){
-					area.add(new int[]{pos[0],pos[1]+1});
-					//colormap.get(i).remove(colormap.get(i).indexOf(new int[]{pos[0],pos[1]+1}));
-				}
-				if(0 < pos[1] && picture[pos[0]][pos[1]-1]==i){
-					area.add(new int[]{pos[0],pos[1]-1});
-					//colormap.get(i).remove(colormap.get(i).indexOf(new int[]{pos[0],pos[1]-1}));
-				}
-				*/
 			}
 		}
 
@@ -899,20 +850,6 @@ public class ProgrammersController {
 	//LV2. 땅따먹기
 	public static int solution_eat_the_ground(int[][] land) {
 		int answer = 0;
-		/*
-		int pre_col = -1;
-		for(int i=0;i<land.length;i++){
-			int max = 0;
-			int col = -1;
-			for(int j=0;j<land[i].length;j++){
-				if(pre_col != j && max < land[i][j]) max = land[i][j];
-				col = j;
-			}
-			System.out.println(max);
-			pre_col = col;
-			answer += max;
-		}
-		*/
 		Map<Integer,Integer> map = new LinkedHashMap<>();
 		for(int i=0;i<land.length;i++){
 			map.put(i,Arrays.stream(land[i]).max().getAsInt());
@@ -983,15 +920,6 @@ public class ProgrammersController {
 
 	//LV2.n^2배열 자르기
 	public static int[] solution_slice_array(int n, long left, long right) {
-		/*
-		int[][] arr = new int[n][n];
-		IntStream.range(0,n).forEach(i -> IntStream.range(0,n).forEach(j-> arr[i][j] = Math.max(i,j)+1));
-		int[] temparr = Arrays.stream(arr).flatMap(a -> Arrays.stream(a).boxed()).mapToInt(b->b).toArray();
-		int[] answer = new int[right-left+1];
-		for(long i=left;i<=right;i++){
-			temparr[i];
-		}
-		*/
 		int[] answer = new int[(int)(right-left+1)];
 		int idx = 0;
 		for(long i = (long)Math.floor(left/n);i<=Math.floor(right/n);i++){
@@ -1031,18 +959,7 @@ public class ProgrammersController {
 	// LV2. 전화번호부
 	public static boolean solution_phonebook(String[] phone_book) {
 		boolean answer = true;
-		/*
-		for(int i=0;i< phone_book.length-1;i++){
-			for(int j=i+1;j< phone_book.length;j++) {
-				if (phone_book[i].startsWith(phone_book[j]) || phone_book[j].startsWith(phone_book[i])) {
-					answer = false;
-					break;
-				}
-			}
-		}
-		*/
 		PriorityQueue<String> queue = Arrays.stream(phone_book).collect(Collectors.toCollection(PriorityQueue::new));
-		//HashSet<String> hash = (HashSet<String>) Arrays.stream(phone_book).collect(Collectors.toSet());
 		while(1 < queue.size()){
 			String str = queue.poll();
 			if(str.startsWith(queue.peek())||queue.peek().startsWith(str)){
