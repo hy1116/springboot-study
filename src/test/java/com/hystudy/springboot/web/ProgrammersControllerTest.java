@@ -273,11 +273,6 @@ public class ProgrammersControllerTest {
 	}
 
 	@Test
-	public void solution_eat_the_ground_test(){
-		assertThat(ProgrammersController.solution_eat_the_ground(new int[][]{{1, 2, 3, 5}, {5, 6, 7, 18}, {4, 3, 2, 1}})).isEqualTo(25);
-	}
-
-	@Test
 	public void solution_repeat_binary_test(){
 		assertThat(ProgrammersController.solution_repeat_binary("110010101001")).isEqualTo(new int[]{3,8});
 		assertThat(ProgrammersController.solution_repeat_binary("1111111")).isEqualTo(new int[]{4,1});
@@ -356,7 +351,27 @@ public class ProgrammersControllerTest {
 	public void solution_skillTree(){
 		assertThat(ProgrammersController.solution_skillTree("CBD",new String[]{"BACDE", "CBADF", "AECB", "BDA","AC","CA"})).isEqualTo(4);
 	}
+
+	@Test
+	public void solution_develop_skill_test(){
+		assertThat(ProgrammersController.solution_develop_skill(new int[]{0,0,0},new int[] {1, 1, 1})).isEqualTo(new int[]{3});
+		assertThat(ProgrammersController.solution_develop_skill(new int[]{0,0,0},new int[] {1, 1, 1})).isEqualTo(new int[]{3});
+		assertThat(ProgrammersController.solution_develop_skill(new int[]{95, 90, 99, 99, 80, 99},new int[] {1, 1, 1, 1, 1, 1})).isEqualTo(new int[]{1, 3, 2});
+		assertThat(ProgrammersController.solution_develop_skill(new int[]{93, 30, 55},new int[] {1, 30, 5})).isEqualTo(new int[]{2, 1});
+
+	}
+
+	@Test
+	public void solution_under_two_bit(){
+		assertThat(ProgrammersController.solution_under_two_bit(new long[]{2,7})).isEqualTo(new long[]{3,11});
+		assertThat(ProgrammersController.solution_under_two_bit(new long[]{3})).isEqualTo(new long[]{5});
+		assertThat(ProgrammersController.solution_under_two_bit(new long[]{0})).isEqualTo(new long[]{1});
+	}
 	//======================================================================================
+	@Test
+	public void solution_eat_the_ground_test(){
+		assertThat(ProgrammersController.solution_eat_the_ground(new int[][]{{1, 2, 3, 5}, {5, 6, 7, 18}, {4, 3, 2, 1}})).isEqualTo(25);
+	}
 
 	@Test
 	public void solution_course(){
@@ -372,5 +387,12 @@ public class ProgrammersControllerTest {
 	@Test
 	public void solution_fatigue(){
 		assertThat(ProgrammersController.solution_fatigue(80,new int[][]{{80,20},{50,30},{30,10}})).isEqualTo(3);
+	}
+
+	@Test
+	public void solution_joystick(){
+		assertThat(ProgrammersController.solution_joystick("JAZ")).isEqualTo(11);
+		assertThat(ProgrammersController.solution_joystick("JAN")).isEqualTo(23);
+		assertThat(ProgrammersController.solution_joystick("JEROEN")).isEqualTo(56);
 	}
 }

@@ -1,5 +1,7 @@
 package com.hystudy.springboot.web;
 
+import jdk.jfr.Unsigned;
+
 import java.math.BigInteger;
 import java.util.*;
 import java.util.List;
@@ -847,37 +849,6 @@ public class ProgrammersController {
 		return stack.empty()?true:false;
 	}
 
-	//LV2. 땅따먹기
-	public static int solution_eat_the_ground(int[][] land) {
-		int answer = 0;
-		Map<Integer,Integer> map = new LinkedHashMap<>();
-		for(int i=0;i<land.length;i++){
-			map.put(i,Arrays.stream(land[i]).max().getAsInt());
-		}
-		map.entrySet().stream().sorted(Comparator.comparing(Map.Entry::getKey));
-		for(int k : map.keySet()){
-			for(int i=0;i<=land.length;i++){
-				System.out.println("k : "+k+" | i : "+i);
-				if(map.get(k)==land[k][i]){
-					System.out.println(k);
-					if(0 <= k-1) land[k-1][i] = 0;
-					if(k+1 < land.length) land[k+1][i] = 0;
-				}
-			}
-		}
-		for(int i=0;i<land.length;i++){
-			for(int j=0;j<land[i].length;j++){
-				System.out.print(land[i][j]+"\t");
-			}
-			System.out.println();
-		}
-		for(int i=0;i<land.length;i++){
-			answer += Arrays.stream(land[i]).max().getAsInt();
-		}
-
-		return answer;
-	}
-
 	//LV2.이진변환 반복하기
 	public static int[] solution_repeat_binary(String s) {
 		int[] answer = new int[2];
@@ -1063,7 +1034,127 @@ public class ProgrammersController {
 				.filter(s->skill.startsWith(s.replaceAll("[^"+skill+"]","")))
 				.count();
 	}
+	// 20220726 완료
+	// LV2. 기능개발 [https://school.programmers.co.kr/learn/courses/30/lessons/42586]
+	public static int[] solution_develop_skill(int[] progresses, int[] speeds) {
+		System.out.println("================== LV2. 기능개발");
+		/*
+		int deploy = 0;
+		List<Integer> answerList = new ArrayList<Integer>();
+		PriorityQueue<Integer> queue = new PriorityQueue<Integer>();
+		for(int i=0;i<progresses.length;i++){
+			//System.out.println(((int) Math.floor((100-progresses[i])/speeds[i])));
+			queue.offer((int) Math.floor((100-progresses[i])/speeds[i]));
+		}
+
+		while(queue.peek()!=null) {
+			int poll = queue.poll();
+			System.out.println(poll);
+			if(queue.peek()==null){
+				answerList.add(++deploy);
+			} else if(poll < queue.peek()) {
+				answerList.add(++deploy);
+				deploy = 0;
+			} else  deploy++;
+		}
+		 */
+		List<Integer> answerList = new ArrayList<Integer>();
+		boolean flag = false;
+		int idx=0,date=0,cnt=1;
+		while(idx < progresses.length) {
+			if (progresses[idx] + (date * speeds[idx]) < 100) {
+				if(flag){
+					answerList.add(cnt);
+					cnt = 1;
+				}
+				date++;
+				flag = false;
+			} else if (flag){
+				idx++;cnt++;
+			} else {
+				idx ++;
+				flag = true;
+			}
+			if(idx == progresses.length) answerList.add(cnt);
+		}
+		return answerList.stream().mapToInt(Integer::intValue).toArray();
+	}
+	// 20220726 완료
+	//LV2. 2개이하로 다른 비트 20220726 완료
+	public static long[] solution_under_two_bit(long[] numbers) {
+		/*
+		for(int i=0;i<numbers.length;i++){
+			String numbin = "0".repeat(64-Long.toBinaryString(numbers[i]).length())+Long.toBinaryString(numbers[i]);
+
+			Long cnt = numbers[i];
+			while(++cnt <= numbers[i]+64){
+				String cntbin = "0".repeat(64-Long.toBinaryString(cnt).length())+Long.toBinaryString(cnt);
+				if(IntStream.range(0,numbin.length()).filter(j -> numbin.charAt(j)!=cntbin.charAt(j)).count() <= 2){
+					answer[i] = cnt;
+					break;
+				}
+			}
+		}
+		*/
+		//----------- 72점
+		long[] answer = new long[numbers.length];
+		for(int i = 0; i < numbers.length;i++){
+			String target = Long.toBinaryString(numbers[i]);
+			int idx = target.lastIndexOf("0");
+
+			if(idx == target.length()-1){ // 마지막숫자가 0일경우
+				answer[i] = numbers[i]+1;
+			}else if(idx == -1){ // 첫자리가 0일 경우
+				answer[i] = Long.parseUnsignedLong("10"+target.substring(idx+2),2);;
+			}else{
+				answer[i] = Long.parseUnsignedLong(target.substring(0,idx)+"10"+target.substring(idx+2),2);
+			}
+		}
+		/*
+		//------------------- 0점
+		long[] answer = new long[numbers.length];
+		for(int i =0;i<numbers.length;i++) {
+			String target = Long.toBinaryString(numbers[i]);
+			int idx = target.lastIndexOf("0");
+			if(idx == -1) idx = target.length();
+			answer[i] = numbers[i]+(long)Math.pow(2,idx);
+			if(idx != 0) answer[i] -= (long)Math.pow(2,idx-1);
+		}
+
+		 */
+		return answer;
+	}
 	//============================================================================
+	//LV2. 땅따먹기
+	public static int solution_eat_the_ground(int[][] land) {
+		int answer = 0;
+		Map<Integer,Integer> map = new LinkedHashMap<>();
+		for(int i=0;i<land.length;i++){
+			map.put(i,Arrays.stream(land[i]).max().getAsInt());
+		}
+		map.entrySet().stream().sorted(Comparator.comparing(Map.Entry::getKey));
+		for(int k : map.keySet()){
+			for(int i=0;i<=land.length;i++){
+				System.out.println("k : "+k+" | i : "+i);
+				if(map.get(k)==land[k][i]){
+					System.out.println(k);
+					if(0 <= k-1) land[k-1][i] = 0;
+					if(k+1 < land.length) land[k+1][i] = 0;
+				}
+			}
+		}
+		for(int i=0;i<land.length;i++){
+			for(int j=0;j<land[i].length;j++){
+				System.out.print(land[i][j]+"\t");
+			}
+			System.out.println();
+		}
+		for(int i=0;i<land.length;i++){
+			answer += Arrays.stream(land[i]).max().getAsInt();
+		}
+
+		return answer;
+	}
 
 	//LV2. 코스요리
 	public static String[] solution_course(String[] orders, int[] course) {
@@ -1114,6 +1205,25 @@ public class ProgrammersController {
 			k -= list.get(idx-1)[1];
 		}
 
+		return answer;
+	}
+
+	//LV2. 조이스틱
+	public static int solution_joystick(String name) {
+		int answer = name.charAt(0)-'A';
+		//System.out.println(answer);
+		int idx = 0;
+		while(++idx < name.length()){
+			answer++;
+			int a = Math.abs(name.charAt(idx)-'A');
+			int b = Math.abs(name.charAt(idx) - 'Z');
+			int c = Math.abs(name.charAt(idx) - name.charAt(idx-1));
+
+			if(a < b) answer += a;
+			else if(b < c) answer += b;
+			else answer += c;
+			//System.out.println(answer);
+		}
 		return answer;
 	}
 }
