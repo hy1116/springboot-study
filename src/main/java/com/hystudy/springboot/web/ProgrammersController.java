@@ -3,6 +3,8 @@ package com.hystudy.springboot.web;
 import jdk.jfr.Unsigned;
 
 import java.math.BigInteger;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.List;
 import java.util.function.Function;
@@ -1124,6 +1126,81 @@ public class ProgrammersController {
 		 */
 		return answer;
 	}
+
+	/*
+	1번 지표	라이언형(R), 튜브형(T)
+	2번 지표	콘형(C), 프로도형(F)
+	3번 지표	제이지형(J), 무지형(M)
+	4번 지표	어피치형(A), 네오형(N)
+	*/
+	// LV1. 성격유형검사 2023.02.14 완료
+	public static String solution_mbti(String[] survey, int[] choices) {
+		String answer = "";
+		Map<String,Integer> surveymap = new HashMap<>();
+
+		for(int i=0;i<survey.length;i++){
+			String key = "";
+			int value = 0;
+			if(choices[i]==4) continue;
+			else if(choices[i] < 4){
+				key = String.valueOf(survey[i].charAt(0));
+				value = 4-choices[i];
+			}else if(choices[i] > 4){
+				key = String.valueOf(survey[i].charAt(1));
+				value = choices[i]-4;
+			}
+
+			if(surveymap.get(key)!=null){
+				surveymap.put(key,surveymap.get(key)+value);
+			} else{
+				surveymap.put(key,value);
+			}
+		}
+
+		String[] arr = {"RT","CF","JM","AN"};
+		for(String s : arr){
+			String first = String.valueOf(s.charAt(0));
+			String second = String.valueOf(s.charAt(1));
+
+			int front = surveymap.get(first)!=null?surveymap.get(first):0;
+			int back = surveymap.get(second)!=null?surveymap.get(second):0;
+			if(front < back)
+				answer+=second;
+			else
+				answer+=first;
+		}
+		return answer;
+	}
+
+	// LV1. 개인정보 유효기간 2023.02.14 완료
+	public static int[] solution_privacyInfo(String today, String[] terms, String[] privacies){
+		List<Integer> answer = new ArrayList<>();
+		try {
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd");
+			Date to_date = sdf.parse(today);
+			Calendar to_c = Calendar.getInstance();
+			to_c.setTime(to_date);
+
+			Map<String,Integer> term_map = Arrays.stream(terms)
+					.collect(Collectors.toMap(a -> a.split(" ")[0], a -> Integer.valueOf(a.split(" ")[1])));
+
+			for(int i=0;i<privacies.length;i++){
+				Date from_date = sdf.parse(privacies[i].split(" ")[0]);
+				String type = privacies[i].split(" ")[1];
+				Calendar from_c = Calendar.getInstance();
+				from_c.setTime(from_date);
+				from_c.add(Calendar.MONTH,term_map.get(type));
+
+				if(to_c.compareTo(from_c) >= 0){
+					answer.add(i+1);
+				}
+			}
+		} catch (Exception e){
+			e.printStackTrace();
+		}
+		return answer.stream().mapToInt(a->a).toArray();
+	}
+
 	//============================================================================
 	//LV2. 땅따먹기
 	public static int solution_eat_the_ground(int[][] land) {
@@ -1168,27 +1245,71 @@ public class ProgrammersController {
 	}
 	//LV2. 구명보트
 	public static int solution_rescue_boat(int[] people, int limit) {
-		int answer = people.length;
 
-		LinkedList<Integer> q = Arrays.stream(people).boxed().sorted().collect(Collectors.toCollection(LinkedList::new));
-		int weight = 0;
-		while(0 < q.size()){
-			weight += q.poll();
-			for(int i=0;i<q.size();i++){
-				if(q.get(i)+weight <= limit){
-					q.remove(i);
-					answer--;
+		// 2022.10.07 60점
+		Stack<Integer> st = Arrays.stream(people).boxed().sorted().collect(Collectors.toCollection(Stack::new));
+
+		int cnt = 0;
+		while(!st.empty()){
+			cnt++;
+			int sum = st.pop();
+			if(limit-sum < 40){
+				continue;
+			}else if(st.indexOf(limit-sum) > -1) { // 최적값이 있는 경우
+				st.remove(st.indexOf(limit - sum));
+			}else{ // 아닌경우
+				int top = st.size();
+				while(0 < top--){
+					if(st.get(top) <= limit-sum){
+						sum += st.get(top);
+						st.remove(top);
+					}
 				}
 			}
 		}
-		return answer;
+		return cnt;
+
+		/*
+		List<Integer> st = Arrays.stream(people).boxed().sorted().collect(Collectors.toList());
+		int cnt = people.length;
+		while(!st.isEmpty()){
+			int sum = st.get(st.size()-1);
+			st.remove(st.size()-1);
+			if(limit-sum < Arrays.stream(people).min().getAsInt()) continue;
+			if(st.indexOf(limit-sum)>-1){
+				st.remove(st.indexOf(limit-sum));
+				cnt--;
+			}
+			for(int i = st.size()-1;0 <= i;i--){
+				if(sum+st.get(i) < limit){
+					sum += st.get(i);
+					st.remove(i);
+					cnt--;
+				}
+				if(sum==limit||st.isEmpty()) break;
+			}
+			cnt++;
+		}
+		return cnt;
+		*/
+		/*
+		int cnt = people.length;
+		int sum = 0;
+		Arrays.stream(people).boxed().sorted(Comparator.reverseOrder()).forEach( a -> {
+			if(sum+a < limit){
+				sum += a;
+				cnt--;
+			}
+		});
+		return cnt;
+		*/
 	}
 	//LV2. 피로도
 	public static int solution_fatigue(int k, int[][] dungeons) {
 		int answer = 0;
 
 		List<int[]> list = Arrays.stream(dungeons).collect(Collectors.toList());
-
+		/*
 		int idx = 0;
 		while(idx < dungeons.length){
 			if(k < list.get(idx)[0]){
@@ -1204,25 +1325,232 @@ public class ProgrammersController {
 			}
 			k -= list.get(idx-1)[1];
 		}
+		*/
+		return answer;
+	}
+
+	//LV2. 조이스틱 - 20220805 48.1
+	public static int solution_joystick(String name) {
+		/*int answer = 0;
+
+		//System.out.println(">> name : "+name);
+		List<Integer> numList = new ArrayList<>();
+		for(int i = 0; i < name.length(); i++) {
+			int num = Math.min(Math.abs(name.charAt(i) - 'A'),Math.abs(name.charAt(i) - 'Z')+1);
+			if(num!=0) numList.add(i);
+			answer += num;
+		}
+
+		boolean reverse = false;
+		int idx = 0,move =0;
+		while(0 < numList.size()-1){
+			move++;
+			//System.out.println(">> idx : "+idx);
+			int min = name.length();
+			for(int i=0;i<numList.size();i++){
+				if(numList.get(i) == idx){
+					numList.remove(i);
+					continue;
+				}
+				if(numList.get(i)-idx < min){ //
+					min = numList.get(i)-idx;
+					reverse = false;
+				}
+				if(name.length()-numList.get(i) < min){
+					min = name.length() - numList.get(i);
+					reverse = true;
+				} else if(numList.get(i)-idx < min && name.length()-numList.get(i) < min){
+					min = numList.get(i)-idx;
+				}
+			}
+
+			if(reverse){
+				if(--idx < 0) idx = name.length()-1;
+			}else{
+				if(name.length()-1 < ++idx) idx = 0;
+			}
+			if(name.length()-1 == move) break;
+		}
+
+		return answer+move;*/
+		int answer = 0;
+
+		//System.out.println(">> name : "+name);
+		List<Integer> numList = new ArrayList<>();
+		for(int i = 0; i < name.length(); i++) {
+			int num = Math.min(Math.abs(name.charAt(i) - 'A'),Math.abs(name.charAt(i) - 'Z')+1);
+			if(num!=0) numList.add(i);
+			answer += num;
+		}
+
+		boolean reverse = false;
+		int idx = 0,move =0;
+		while(0 < numList.size()-1){
+			if(name.length()-1 == ++move) break;
+			//System.out.println(">> idx : "+idx);
+			int min = name.length();
+			for(int i=0;i<numList.size();i++){
+				if(numList.get(i) == idx){
+					numList.remove(i);
+					continue;
+				}
+				if(numList.get(i)-idx == name.length()-numList.get(i) && numList.get(i)-idx < min){
+					min = numList.get(i)-idx;
+					continue;
+				}
+				if(name.length()-numList.get(i) < min){
+					min = name.length() - numList.get(i);
+					reverse = true;
+				}
+				if(numList.get(i)-idx < min){ //
+					min = numList.get(i)-idx;
+					reverse = false;
+				}
+			}
+
+			if(reverse && idx-1 < 0) idx = name.length()-1;
+			else if(!reverse && name.length()-1 < idx+1) idx = 0;
+		}
+
+		return answer+move;
+	}
+
+	// LV2. N-Queen
+	public static int solution_n_queen(int n) {
+		int answer = Math.round(n/2)*(Math.round(n/2)-(n%2==0?1:0));
 
 		return answer;
 	}
 
-	//LV2. 조이스틱
-	public static int solution_joystick(String name) {
-		int answer = name.charAt(0)-'A';
-		//System.out.println(answer);
-		int idx = 0;
-		while(++idx < name.length()){
-			answer++;
-			int a = Math.abs(name.charAt(idx)-'A');
-			int b = Math.abs(name.charAt(idx) - 'Z');
-			int c = Math.abs(name.charAt(idx) - name.charAt(idx-1));
+	// LV.2 귤고르기
+	public static int solution_choice_tangerine(int k, int[] tangerine) {
+		int answer = 0;
 
-			if(a < b) answer += a;
-			else if(b < c) answer += b;
-			else answer += c;
-			//System.out.println(answer);
+		Long[] arr = Arrays.stream(tangerine).boxed()
+				.collect(Collectors.groupingBy(Function.identity(),Collectors.counting()))
+				.values().toArray(Long[]::new);
+
+		Arrays.sort(arr,Comparator.reverseOrder());
+
+		int sum = 0;
+		for(Long i : arr){
+			sum += i;
+			answer++;
+			if(k <= sum) break;
+		}
+
+		return answer;
+	}
+
+	// LV2. 점찍기
+	public static long solution_drawing_comma(int k, int d) {
+		/*
+		//20221209
+		long answer = (int)Math.pow(d/k+1,2);
+		System.out.println("*----- d : "+d+" / k :"+k);
+		double unit = d/k,idx = 0;
+		while(idx <= d-k){
+			System.out.println("unit : "+ unit);
+			idx += k;
+			answer -= (int)unit;
+			unit = Math.sqrt(unit);
+		}
+		return answer;
+		*/
+		/*
+		// 20221208
+		int answer = 0;
+		int yd = d;
+		for(int x=0;x<=d;x+=k){
+			for(int y=0;y<=Math.sqrt(x*y);y+=k){
+				if(Math.pow(x,2)+Math.pow(y,2) <= Math.pow(d,2)){
+					System.out.println("["+x+","+y+"]");
+					answer++;
+				}
+			}
+		}
+		return answer;
+		*/
+		// 20221209
+
+		//double mi = ((double)d/(double)k)*Math.PI;
+		/*
+		double mi = (k+1)*d;
+		System.out.println(mi);
+		System.out.println((Math.pow((d/k)+1,2)));
+		int answer = (int)(Math.pow((d/k)+1,2) - mi);
+
+
+		 */
+		/*
+		double answer = Math.pow((d/k)+1,2);
+		for(int i = 0; i < d; i+=k){
+			for(int j = 0; j < d;j+=k){
+				d = (int)Math.sqrt(d);
+				System.out.println("i :"+i+" / j : "+j);
+				answer--;
+			}
+		}
+		System.out.println(answer);
+		*/
+		//20221212
+		double answer = Math.pow((d/k)+1,2)*(Math.PI/4);
+
+		System.out.println(answer);
+
+		return (int)answer;
+	}
+
+	//
+	public static int solution_magical_elevator(int storey) {
+		int answer = 0;
+
+		String[] strarr = String.valueOf(storey).split("");
+		for (int i=strarr.length-1;0 <= i;i--){
+			int a = Integer.parseInt(strarr[i]);
+			int b = Math.abs(10 - a);
+			if(b < 0 || a <= b){
+				answer += a;
+			}else{
+				answer += b;
+				if(i!=0) strarr[i-1] = String.valueOf(Integer.valueOf(strarr[i-1])+1);
+			}
+		}
+
+		/*
+		String[] strarr = String.valueOf(storey).split("");
+		for (int i=0;i<strarr.length;i++){
+			int a = Integer.parseInt(strarr[i]);
+			int b = Math.abs(10 - a);
+			System.out.println("a : "+ a + "/ b : "+b);
+			if(a <= b){
+				answer += a;
+			}else{
+				answer += b;
+				if(i < strarr.length-1 &&Integer.valueOf(strarr[i+1]) <= 5) answer++;
+				else  answer--;
+			}
+			System.out.println("answer : "+ answer);
+		}
+		*/
+
+		return answer;
+	}
+
+	// LV1. 숫자 짝궁
+	public static String solution_number_partner(String X, String Y) {
+		String answer = "";
+
+		for(int i=0;i< X.split("").length;i++){
+			String s = X.split("")[i];
+			int n = (int) Arrays.stream(Y.split("")).filter(a->a.equals(s)).count();
+			answer += s.repeat(n);
+			if(n>1) i+=n-1;
+		}
+		if("".equals(answer)){
+			answer = "-1";
+		} else if(Integer.valueOf(answer)==0){
+			answer = "0";
 		}
 		return answer;
 	}

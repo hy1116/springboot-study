@@ -382,6 +382,9 @@ public class ProgrammersControllerTest {
 	public void solution_rescue_boat(){
 		assertThat(ProgrammersController.solution_rescue_boat(new int[]{70, 50, 80, 50},100)).isEqualTo(3);
 		assertThat(ProgrammersController.solution_rescue_boat(new int[]{70, 80, 50},100)).isEqualTo(3);
+		assertThat(ProgrammersController.solution_rescue_boat(new int[]{50, 50, 50, 50, 50},50)).isEqualTo(5);
+		assertThat(ProgrammersController.solution_rescue_boat(new int[]{50, 50, 50, 50, 50},250)).isEqualTo(1);
+		assertThat(ProgrammersController.solution_rescue_boat(new int[]{90, 80, 70, 60, 50, 40},130)).isEqualTo(3);
 	}
 
 	@Test
@@ -391,8 +394,59 @@ public class ProgrammersControllerTest {
 
 	@Test
 	public void solution_joystick(){
+		assertThat(ProgrammersController.solution_joystick("AAAAA")).isEqualTo(0);
 		assertThat(ProgrammersController.solution_joystick("JAZ")).isEqualTo(11);
 		assertThat(ProgrammersController.solution_joystick("JAN")).isEqualTo(23);
 		assertThat(ProgrammersController.solution_joystick("JEROEN")).isEqualTo(56);
+		assertThat(ProgrammersController.solution_joystick("BAAAAAAABB")).isEqualTo(5);
+		assertThat(ProgrammersController.solution_joystick("AAAABBBAAA")).isEqualTo(9);
+	}
+
+	@Test
+	public void solution_n_queen_test(){
+		assertThat(ProgrammersController.solution_n_queen(4)).isEqualTo(2);
+	}
+
+	@Test
+	public void solution_choice_tangerine_test(){
+		assertThat(ProgrammersController.solution_choice_tangerine(2,new int[]{2,2,4,4,6,6})).isEqualTo(1);
+		assertThat(ProgrammersController.solution_choice_tangerine(6,new int[]{1, 3, 2, 5, 4, 5, 2, 3})).isEqualTo(3);
+	}
+
+	@Test
+	public void solution_drawing_comma_test(){
+		assertThat(ProgrammersController.solution_drawing_comma(1,5)).isEqualTo(26);
+		assertThat(ProgrammersController.solution_drawing_comma(2,4)).isEqualTo(6);
+		assertThat(ProgrammersController.solution_drawing_comma(3,6)).isEqualTo(6);
+		assertThat(ProgrammersController.solution_drawing_comma(3,5)).isEqualTo(4);
+		assertThat(ProgrammersController.solution_drawing_comma(500,1000)).isEqualTo(6);
+	}
+
+	@Test
+	public void solution_magical_elevator_test(){
+		assertThat(ProgrammersController.solution_magical_elevator(16)).isEqualTo(6);
+		assertThat(ProgrammersController.solution_magical_elevator(2554)).isEqualTo(16);
+		assertThat(ProgrammersController.solution_magical_elevator(666)).isEqualTo(10);
+		assertThat(ProgrammersController.solution_magical_elevator(100000000)).isEqualTo(1);
+		assertThat(ProgrammersController.solution_magical_elevator(100000001)).isEqualTo(2);
+		assertThat(ProgrammersController.solution_magical_elevator(155)).isEqualTo(11);
+		assertThat(ProgrammersController.solution_magical_elevator(154)).isEqualTo(10);
+		assertThat(ProgrammersController.solution_magical_elevator(5)).isEqualTo(5);
+	}
+
+	@Test
+	public void solution_mbti_test() {
+		assertThat(ProgrammersController.solution_mbti(new String[]{"AN", "CF", "MJ", "RT", "NA"},new int[]{5, 3, 2, 7, 5})).isEqualTo("TCMA");
+		assertThat(ProgrammersController.solution_mbti(new String[]{"TR", "RT", "TR"},new int[]{7, 1, 3})).isEqualTo("RCJA");
+	}
+
+	@Test
+	public void solution_privacyInfo_test() {
+		assertThat(ProgrammersController.solution_privacyInfo("2022.05.19",new String[]{"A 6", "B 12", "C 3"}, new String[]{"2021.05.02 A", "2021.07.01 B", "2022.02.19 C", "2022.02.20 C"})).isEqualTo(new int[]{1, 3});
+	}
+
+	@Test
+	public void solution_number_partner_test() {
+		assertThat(ProgrammersController.solution_number_partner("100", "2345")).isEqualTo("-1");
 	}
 }
