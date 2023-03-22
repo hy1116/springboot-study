@@ -240,17 +240,6 @@ public class ProgrammersControllerTest {
 	}
 
 	@Test
-	public void solution_max_square_test(){
-		assertThat(ProgrammersController.solution_max_square(new int[][]{{0,1,1,1},{0,1,1,1},{1,1,1,1},{0,0,1,0}})).isEqualTo(9);
-		assertThat(ProgrammersController.solution_max_square(new int[][]{{0,0,1,1}, {1,1,1,1}})).isEqualTo(4);
-	}
-
-	@Test
-	public void solution_coloringbook_test(){
-		assertThat(ProgrammersController.solution_coloringbook(6,4,new int[][]{{1, 1, 1, 0}, {1, 1, 1, 0}, {0, 0, 0, 1}, {0, 0, 0, 1}, {0, 0, 0, 1}, {0, 0, 0, 1}})).isEqualTo(new int[]{2, 6});
-	}
-
-	@Test
 	public void solution_english_word_chain_game_test(){
 		assertThat(ProgrammersController.solution_english_word_chain_game(3,new String[]{"tank", "kick", "know", "wheel", "land", "dream", "mother", "robot", "tank"})).isEqualTo(new int[]{3, 3});
 	}
@@ -367,7 +356,22 @@ public class ProgrammersControllerTest {
 		assertThat(ProgrammersController.solution_under_two_bit(new long[]{3})).isEqualTo(new long[]{5});
 		assertThat(ProgrammersController.solution_under_two_bit(new long[]{0})).isEqualTo(new long[]{1});
 	}
+
+
 	//======================================================================================
+
+	@Test
+	public void solution_max_square_test(){
+		assertThat(ProgrammersController.solution_max_square(new int[][]{{0,1,1,1},{0,1,1,1},{1,1,1,1},{0,0,1,0}})).isEqualTo(9);
+		assertThat(ProgrammersController.solution_max_square(new int[][]{{0,0,1,1}, {1,1,1,1}})).isEqualTo(4);
+	}
+
+	@Test
+	public void solution_coloringbook_test(){
+		assertThat(ProgrammersController.solution_coloringbook(6,4,new int[][]{{1, 1, 1, 0}, {1, 1, 1, 0}, {0, 0, 0, 1}, {0, 0, 0, 1}, {0, 0, 0, 1}, {0, 0, 0, 1}})).isEqualTo(new int[]{2, 6});
+	}
+
+
 	@Test
 	public void solution_eat_the_ground_test(){
 		assertThat(ProgrammersController.solution_eat_the_ground(new int[][]{{1, 2, 3, 5}, {5, 6, 7, 18}, {4, 3, 2, 1}})).isEqualTo(25);
@@ -434,19 +438,7 @@ public class ProgrammersControllerTest {
 		assertThat(ProgrammersController.solution_magical_elevator(5)).isEqualTo(5);
 	}
 
-	@Test
-	public void solution_mbti_test() {
-		assertThat(ProgrammersController.solution_mbti(new String[]{"AN", "CF", "MJ", "RT", "NA"},new int[]{5, 3, 2, 7, 5})).isEqualTo("TCMA");
-		assertThat(ProgrammersController.solution_mbti(new String[]{"TR", "RT", "TR"},new int[]{7, 1, 3})).isEqualTo("RCJA");
-	}
 
-	@Test
-	public void solution_privacyInfo_test() {
-		assertThat(ProgrammersController.solution_privacyInfo("2022.05.19",new String[]{"A 6", "B 12", "C 3"}, new String[]{"2021.05.02 A", "2021.07.01 B", "2022.02.19 C", "2022.02.20 C"})).isEqualTo(new int[]{1, 3});
-	}
 
-	@Test
-	public void solution_number_partner_test() {
-		assertThat(ProgrammersController.solution_number_partner("100", "2345")).isEqualTo("-1");
-	}
+
 }
