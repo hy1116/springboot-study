@@ -438,7 +438,10 @@ public class ProgrammersControllerTest {
 		assertThat(ProgrammersController.solution_magical_elevator(5)).isEqualTo(5);
 	}
 
-
+	@Test
+	public void solution_minerals_test(){
+		assertThat(ProgrammersController.solution_mineral(new int[]{1, 3, 2},new String[]{"diamond", "diamond", "diamond", "iron", "iron", "diamond", "iron", "stone"})).isEqualTo(12);
+	}
 
 
 }

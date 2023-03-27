@@ -1,5 +1,6 @@
 package com.hystudy.springboot.web;
 
+import java.io.PrintStream;
 import java.math.BigInteger;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -7,6 +8,7 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 public class ProgrammersController {
 	// Lv.1 신고 결과 받기
@@ -1383,4 +1385,43 @@ public class ProgrammersController {
 
 		return Arrays.stream(first).filter(i -> Arrays.stream(first).filter(f->i<f).count() == 0).findFirst().getAsInt();
 	}
+
+	// LV2. 광물캐기
+	enum mineral{diamond,iron,stone};
+	public static int solution_mineral(int[] picks, String[] minerals) {
+		int answer = 0;
+
+		// int List 변환
+		List<Integer> mineList = Arrays.stream(minerals).mapToInt(a->mineral.valueOf(a).ordinal()).boxed().collect(Collectors.toList());
+
+		// 5개씩 나누기
+		int unit = 5;
+		List<List<Integer>> mineSubList = new ArrayList<>();
+		System.out.println(minerals.length/unit);
+		for(int i=0;i<Math.floor(minerals.length/unit);i++){
+			mineSubList.add(mineList.subList(unit*i,unit*(i+1)));
+		}
+		if(minerals.length%5!=0) mineSubList.add(mineList.subList((int) (5 * Math.floor(minerals.length/unit)),minerals.length));
+
+		// sum이 큰 순서대로 정렬
+		//mineSubList.stream().sorted(Comparator.reverseOrder());
+
+		int pick = 0;
+		for(List<Integer> list : mineSubList){
+			// 곡괭이 선택
+			while(picks[pick]<=0){
+				if(pick > picks.length) break;
+				pick++;
+			}
+
+			// 피로도 계산
+			for(Integer i :list){
+				answer += Math.ceil(Math.pow(5,pick-i));
+				System.out.println("sum : "+ Math.ceil(Math.pow(5,pick-i)));
+			}
+
+		}
+		return answer;
+	}
+
 }
