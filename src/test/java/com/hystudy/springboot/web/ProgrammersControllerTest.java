@@ -440,7 +440,8 @@ public class ProgrammersControllerTest {
 
 	@Test
 	public void solution_minerals_test(){
-		assertThat(ProgrammersController.solution_mineral(new int[]{1, 3, 2},new String[]{"diamond", "diamond", "diamond", "iron", "iron", "diamond", "iron", "stone"})).isEqualTo(12);
+		assertThat(ProgrammersController.solution_mineral2(new int[]{1, 3, 2},new String[]{"diamond", "diamond", "diamond", "iron", "iron", "diamond", "iron", "stone"})).isEqualTo(12);
+		assertThat(ProgrammersController.solution_mineral2(new int[]{0, 1, 1},new String[]{"diamond", "diamond", "diamond", "diamond", "diamond", "iron", "iron", "iron", "iron", "iron", "diamond"})).isEqualTo(50);
 	}
 
 

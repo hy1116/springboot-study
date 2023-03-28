@@ -1,14 +1,10 @@
 package com.hystudy.springboot.web;
 
-import java.io.PrintStream;
-import java.math.BigInteger;
-import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.List;
+import java.util.stream.*;
 import java.util.function.Function;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
-import java.util.stream.Stream;
+
+import java.math.BigInteger;
 
 public class ProgrammersController {
 	// Lv.1 신고 결과 받기
@@ -1397,31 +1393,86 @@ public class ProgrammersController {
 		// 5개씩 나누기
 		int unit = 5;
 		List<List<Integer>> mineSubList = new ArrayList<>();
-		System.out.println(minerals.length/unit);
-		for(int i=0;i<Math.floor(minerals.length/unit);i++){
-			mineSubList.add(mineList.subList(unit*i,unit*(i+1)));
+		for(int i=0;i<Arrays.stream(picks).sum();i++){
+			if (minerals.length < unit*(i+1)){
+				mineSubList.add(mineList.subList(unit*i,minerals.length));
+				break;
+			} else{
+				mineSubList.add(mineList.subList(unit*i,unit*(i+1)));
+			}
 		}
-		if(minerals.length%5!=0) mineSubList.add(mineList.subList((int) (5 * Math.floor(minerals.length/unit)),minerals.length));
 
-		// sum이 큰 순서대로 정렬
-		//mineSubList.stream().sorted(Comparator.reverseOrder());
+		// sum 오름차순 정렬
+		mineSubList = mineSubList.stream().sorted(
+				Comparator.comparing((List<Integer> a)->a.stream().filter(b->b==0).count())
+					.thenComparing((List<Integer> c)->c.stream().filter(b->b==1).count())
+					.thenComparing((List<Integer> e)->e.stream().filter(f->f==2).count())
+					.reversed())
+				.collect(Collectors.toList());
 
+		// 곡괭이 선택 및 피로도 계산
 		int pick = 0;
 		for(List<Integer> list : mineSubList){
-			// 곡괭이 선택
-			while(picks[pick]<=0){
-				if(pick > picks.length) break;
+			while(picks[pick] == 0){
 				pick++;
+				if(pick >= picks.length) return answer;
 			}
+			picks[pick]--;
 
-			// 피로도 계산
-			for(Integer i :list){
-				answer += Math.ceil(Math.pow(5,pick-i));
-				System.out.println("sum : "+ Math.ceil(Math.pow(5,pick-i)));
-			}
-
+			for(Integer i :list) answer += Math.ceil(Math.pow(5,pick-i));
 		}
 		return answer;
 	}
 
+	public static int solution_mineral2(int[] picks, String[] minerals) {
+		int answer = 0;
+
+		// int List 변환
+		List<Integer> mineList = Arrays.stream(minerals).mapToInt(a->mineral.valueOf(a).ordinal()).boxed().collect(Collectors.toList());
+
+		// 5개씩 나누기
+		int unit = 5;
+		List<List<Integer>> mineSubList = new ArrayList<>();
+		for(int i=0;i<Arrays.stream(picks).sum();i++){
+			if (minerals.length < unit*(i+1)){
+				mineSubList.add(mineList.subList(unit*i,minerals.length));
+				break;
+			} else{
+				mineSubList.add(mineList.subList(unit*i,unit*(i+1)));
+			}
+		}
+		IntStream.iterate(0,i->i+unit).collect((int a)->Collectors.toMap(Arrays.stream(minerals).skip(a).limit(a+unit)));
+
+
+		// sum 오름차순 정렬
+		mineSubList = mineSubList.stream().sorted(
+						Comparator.comparing((List<Integer> a)->a.stream().filter(b->b==0).count())
+								.thenComparing((List<Integer> c)->c.stream().filter(b->b==1).count())
+								.thenComparing((List<Integer> e)->e.stream().filter(f->f==2).count())
+								.reversed())
+				.collect(Collectors.toList());
+
+		// 곡괭이 선택 및 피로도 계산
+		int pick = 0;
+		for(List<Integer> list : mineSubList){
+			while(picks[pick] == 0){
+				pick++;
+				if(pick >= picks.length) return answer;
+			}
+			picks[pick]--;
+
+			for(Integer i :list) answer += Math.ceil(Math.pow(5,pick-i));
+		}
+		return answer;
+	}
+
+	public static void printMine(List<List<Integer>> listList){
+		System.out.println("-------------------------------------- printMine");
+		for(List<Integer> list : listList){
+			for(Integer i : list){
+				System.out.print("\t"+i);
+			}
+			System.out.println();
+		}
+	}
 }
