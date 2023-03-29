@@ -568,6 +568,17 @@ public class ProgrammersLv1Controller {
 		return answer;
 	}
 
+	// LV1. 공원 산책
+	public static int[] solution_walking_park(String[] park, String[] routes) {
+		int[] answer = {};
+
+		Arrays.stream(park).map(r-> Arrays.stream(r.split("")).collect(Collectors.toList()));
+
+
+		System.out.println();
+		return answer;
+	}
+
 	//============================================================================
 	// LV1. 햄버거 만들기
 	public static int solution_making_hamburger(int[] ingredient) {

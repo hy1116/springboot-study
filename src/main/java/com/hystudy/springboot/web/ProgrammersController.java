@@ -1424,46 +1424,24 @@ public class ProgrammersController {
 		return answer;
 	}
 
+	// 23.03.29
 	public static int solution_mineral2(int[] picks, String[] minerals) {
-		int answer = 0;
-
-		// int List 변환
-		List<Integer> mineList = Arrays.stream(minerals).mapToInt(a->mineral.valueOf(a).ordinal()).boxed().collect(Collectors.toList());
-
-		// 5개씩 나누기
-		int unit = 5;
-		List<List<Integer>> mineSubList = new ArrayList<>();
-		for(int i=0;i<Arrays.stream(picks).sum();i++){
-			if (minerals.length < unit*(i+1)){
-				mineSubList.add(mineList.subList(unit*i,minerals.length));
-				break;
-			} else{
-				mineSubList.add(mineList.subList(unit*i,unit*(i+1)));
-			}
-		}
-		IntStream.iterate(0,i->i+unit).collect((int a)->Collectors.toMap(Arrays.stream(minerals).skip(a).limit(a+unit)));
-
-
-		// sum 오름차순 정렬
-		mineSubList = mineSubList.stream().sorted(
-						Comparator.comparing((List<Integer> a)->a.stream().filter(b->b==0).count())
-								.thenComparing((List<Integer> c)->c.stream().filter(b->b==1).count())
-								.thenComparing((List<Integer> e)->e.stream().filter(f->f==2).count())
-								.reversed())
-				.collect(Collectors.toList());
-
-		// 곡괭이 선택 및 피로도 계산
-		int pick = 0;
-		for(List<Integer> list : mineSubList){
-			while(picks[pick] == 0){
-				pick++;
-				if(pick >= picks.length) return answer;
-			}
-			picks[pick]--;
-
-			for(Integer i :list) answer += Math.ceil(Math.pow(5,pick-i));
-		}
-		return answer;
+		return IntStream.iterate(0,i->i+5).limit(Arrays.stream(picks).sum())
+				.mapToObj(r -> Arrays.stream(minerals)
+								.skip(r).limit(5)
+								.mapToInt(a->mineral.valueOf(a).ordinal()).boxed()
+								.collect(Collectors.toList()))
+				.sorted(Comparator.comparing((List<Integer> a)->a.stream().filter(b->b==0).count())
+						.thenComparing((List<Integer> c)->c.stream().filter(b->b==1).count())
+						.thenComparing((List<Integer> e)->e.stream().filter(f->f==2).count())
+						.reversed())
+				.mapToInt(s->{
+					int pick = 0;
+					while(picks[pick] == 0) pick++;
+					picks[pick++]--;
+					int finalPick = pick;
+					return s.stream().mapToInt(i -> (int)Math.ceil(Math.pow(5, finalPick -i))).sum();
+				}).sum();
 	}
 
 	public static void printMine(List<List<Integer>> listList){

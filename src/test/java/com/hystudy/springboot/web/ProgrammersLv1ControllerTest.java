@@ -164,4 +164,9 @@ public class ProgrammersLv1ControllerTest {
 		assertThat(ProgrammersLv1Controller.solution_number_partner("52", "5522")).isEqualTo("52");
 		assertThat(ProgrammersLv1Controller.solution_number_partner("000000000", "000000000")).isEqualTo("0");
 	}
+
+	@Test
+	public void solution_walking_park_test() {
+		assertThat(ProgrammersLv1Controller.solution_walking_park(new String[]{"SOO","OOO","OOO"},new String[]{"E 2","S 2","W 1"})).isEqualTo(new int[]{2,1});
+	}
 }
