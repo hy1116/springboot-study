@@ -1,9 +1,10 @@
 package com.hystudy.springboot.web;
 
-import java.lang.reflect.Array;
 import java.math.BigInteger;
+import java.sql.Array;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.function.BinaryOperator;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -576,21 +577,247 @@ public class ProgrammersLv1Controller {
 
 
 		System.out.println();
+
 		return answer;
 	}
 
-	//============================================================================
-	// LV1. 햄버거 만들기
+
 	public static int solution_making_hamburger(int[] ingredient) {
-		// 1: 빵 _ 빵으로 감싸지는 햄버거갯수 히턴
-		// {빵 – 야채 – 고기 - 빵} 로 쌓인 햄버거만 포장 == {1,2,3,1}
-		int i = 0;
-		//List<Integer> ingredientList = Arrays.asList(ingredient);
-		//Arrays.stream(ingredient).anyMatch();
-		List<Integer> hangurgerList = Arrays.asList(1,2,3,1);
-		List<Integer> ingredientList = Arrays.stream(ingredient).boxed().collect(Collectors.toList());
-		ingredientList.remove(ingredientList);
-		System.out.println(ingredientList.remove(ingredientList));
-		return i;
+/*
+		List<Integer> list = Arrays.stream(ingredient).boxed().collect(Collectors.toList());
+		list = list.subList(list.indexOf(1),list.lastIndexOf(1)+1);
+
+		int answer =0,i = 0,idx = -1,bottom = 0;
+
+		int[] pack = {1,2,3,1};
+		while(idx++ < list.size()-1){
+			if(i==pack.length-1 && list.get(idx) == pack[i]){ // 포장
+				answer++;
+				for (int j=0;j<idx-bottom;j++){
+					list.remove(j);
+				}
+				idx=-1;
+				i=0;
+			} else if(list.get(idx) == pack[i]){ // 필요한 재료인 경우
+				i++;
+			} else if(i!=0 && list.get(idx) == 1){ // 빵이 끼어든 경우
+				bottom = idx;
+				i=1;
+			}
+		}
+
+ */
+		/*
+		int answer =0;
+		List<Integer> list = Arrays.stream(ingredient).boxed().collect(Collectors.toList());
+		list = list.subList(list.indexOf(1),list.lastIndexOf(1)+1);
+
+		int[] pack = {1,2,3,1};
+		int packPoint = 0;
+		Stack<Integer> st = new Stack<>();
+		for(int i=0;i<list.size()-1;i++){
+			if(pack[packPoint]==list.get(i)){
+				if(++packPoint >= pack.length){
+					answer++;
+					System.out.println("answer");
+					while (!st.empty()){
+						System.out.println("pop");
+						if(st.pop() == 1) break;
+					}
+					i=0;
+					packPoint = 0;
+				}
+			} else if(list.get(i)==1){
+				packPoint = 1;
+			}
+			st.push(list.get(i));
+		}
+
+		 */
+		int answer = 0;
+		List<Integer> Onelist = new ArrayList<>();
+		for(int i=0;i<ingredient.length;i++){
+			if(ingredient[i]==1) Onelist.add(i);
+		}
+		System.out.println(Onelist.size());
+		for(int i=1;i<Onelist.size()-1;i++){
+			System.out.println("list.get(i-1) : "+Onelist.get(i-1)+" | list.get(i) : "+Onelist.get(i));
+			List<Integer> tmplist = Onelist.subList(Onelist.get(i-1),Onelist.get(i));
+
+			if(tmplist.contains(2) && tmplist.contains(3) && tmplist.indexOf(2) < tmplist.lastIndexOf(3)){
+				answer++;
+				i=0;
+				for(int j = i-1;j<i;j++){
+					ingredient[j] = 0;
+				}
+			}
+		}
+		return answer;
+	}
+	
+	public static int solution1(String[] strarr){
+		for(int i=0;i<strarr.length;i++){
+			if("+".equals(strarr[i])) strarr[i] = String.valueOf(Integer.valueOf(strarr[i-1])+Integer.valueOf(strarr[i-2]));
+			else if("R".equals(strarr[i])) strarr[i] = strarr[i-1] = String.valueOf(0);
+			else if("D".equals(strarr[i])) strarr[i] = String.valueOf(Integer.valueOf(strarr[i-1]) *2);
+		}
+		return Arrays.stream(strarr).mapToInt(Integer::valueOf).sum();
+	}
+
+	public static int solution2(int[] arr1, int[] arr2){
+		List<Integer> arr2list = Arrays.stream(arr2).boxed().collect(Collectors.toList());
+		return Arrays.stream(arr1).filter(arr2list::contains).min().getAsInt();
+	}
+
+	public static String solution3(String str){
+		return Arrays.stream(str.split("")).distinct()
+				.collect(Collectors.toMap(Function.identity(),r -> Arrays.stream(str.split("")).filter(r::equals).count()))
+				.entrySet().stream().sorted(Map.Entry.<String, Long>comparingByValue().reversed().thenComparing(Map.Entry::getKey))
+				.map(r->r.getKey().repeat(r.getValue().intValue())).collect(Collectors.joining());
+	}
+
+	/*
+	static HashSet<String> rs;
+	static String[] oparr,numarr,orgnumarr,resultarr;
+	static boolean[] visitarr;
+	public static int[] solution4(String str){
+		int[] intarr = null;
+		numarr = str.split("[-*+]");
+		orgnumarr = str.split("[-*+]");
+		oparr = str.split("[0-9]");
+		resultarr = new String[oparr.length-1];
+		visitarr = new boolean[oparr.length-1];
+		Arrays.fill(visitarr,false);
+		rs = new HashSet<>();
+		getPermutations(0,0);
+
+		return intarr;
+	}
+	public static void getPermutations(int digit, int flag){
+		if(digit == oparr.length-1){
+			System.out.println(Arrays.stream(resultarr).filter(Objects::nonNull).collect(Collectors.joining()));
+			//rs.add(s);
+			//resultarr = new String[oparr.length-1];
+
+			return;
+		}
+		for (int i=1;i<oparr.length;i++){
+			String left = numarr[i-1],right = numarr[i];
+			if((flag &  1<<i) != 0) continue;
+
+			if(i > 1 && resultarr[i-2]!=null){
+				left = resultarr[i-2];
+				resultarr[i-2] = null;
+			}
+			if(i < oparr.length-1 && resultarr[i]!=null){
+				right = resultarr[i];
+				resultarr[i] = null;
+			}
+			System.out.println("left : "+left+" | right : "+right);
+			resultarr[i-1] = "(" +left +oparr[i] +right +")";
+			getPermutations(digit+1,flag | 1 << i);
+			resultarr[i-1] = null;
+		}
+		System.out.println("digit : "+digit+" | flag : "+Integer.toBinaryString( flag));
+	}
+	*/
+
+	static HashSet<String> rs;
+	static String[] oparr,numarr,resultarr;
+	static Boolean[] visitarr;
+	static Stack<Integer> st;
+	public static int[] solution4(String str){
+		int[] intarr = null;
+		numarr = str.split("[-*+]");
+		oparr = str.split("[0-9]");
+		resultarr = new String[oparr.length-1];
+		visitarr = new Boolean[oparr.length-1];
+		Arrays.fill(visitarr,false);
+		rs = new HashSet<>();
+		st = new Stack();
+		getPermutations(0,0);
+		System.out.println("-------------------");
+		rs.forEach(System.out::println);
+		return intarr;
+	}
+	/*
+	public static void getPermutations(int digit, int flag){
+		if(digit == oparr.length-1){
+			String result = "";
+			result = Arrays.stream(resultarr).filter(Objects::nonNull).collect(Collectors.joining());
+			//System.out.println(Arrays.toString(visitarr));
+			//System.out.println(Arrays.toString(resultarr));
+			for(int i=0;i< oparr.length-1;i++){
+				if(!visitarr[i]){
+					if(0 < i && i < oparr.length-2) result = "("+resultarr[i-1]+oparr[i+1]+resultarr[i+1]+")";
+					else if(i==0) result = "("+numarr[i]+oparr[i+1]+resultarr[i+1]+")";
+					else if(i==oparr.length-2) result = "("+resultarr[i-2]+oparr[i+1]+numarr[i+1]+")";
+				}
+			}
+			st.forEach(System.out::println);
+			rs.add(result);
+			Arrays.fill(visitarr,false);
+			return;
+		}
+		for (int i=0;i<oparr.length-1;i++){
+			String left = numarr[i],right = numarr[i+1];
+			if((flag &  1<<i) != 0) continue;
+
+			if(i > 0 && resultarr[i-1]!=null){
+				left = resultarr[i-1];
+				resultarr[i-1] = null;
+			}
+			if(i+1 < oparr.length-1 && resultarr[i+1]!=null){
+				right = resultarr[i+1];
+				resultarr[i+1] = null;
+			}
+			System.out.println("left : "+left+ " | right : "+right+"| digit :"+digit) ;
+			resultarr[i] = "(" +left +oparr[i+1] +right +")";
+			st.push("(" +left +oparr[i+1] +right +")");
+			visitarr[i] = true;
+			getPermutations(digit+1,flag | 1 << i);
+			resultarr[i] = null;
+			visitarr[i] = false;
+		}
+	}
+	*/
+
+	public static void getPermutations(int digit, int flag){
+		if(digit == oparr.length-1){
+			String result = "";
+			while(!st.empty()){
+				result += String.valueOf(st.pop());
+			}
+			st.clear();
+			rs.add("result : "+result);
+			return;
+		}
+		for (int i=0;i<oparr.length-1;i++){
+			if((flag & 1<<i) != 0) continue;
+			st.push(i);
+			getPermutations(digit+1,flag | 1 << i);
+			resultarr[i] = null;
+		}
+	}
+	public static int solution5(int[] intarr){
+		int answer = 0,liz = 0, max = 0, happysum = 0,unhappysum = 0;
+		for(int i : intarr){
+			if(8 < i){
+				liz++;
+				max++;
+				if(0 < liz) happysum++;
+			} else{
+				if(0 < liz--){
+					max++;
+					unhappysum++;
+				}
+				else max = 0;
+				liz = 0;
+			}
+
+			if(answer < max) answer = max;
+		}
+		if(0 < answer && unhappysum - happysum >= 0) answer -= (unhappysum - happysum + 1);
+		return answer;
 	}
 }

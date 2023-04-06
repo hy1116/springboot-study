@@ -169,4 +169,33 @@ public class ProgrammersLv1ControllerTest {
 	public void solution_walking_park_test() {
 		assertThat(ProgrammersLv1Controller.solution_walking_park(new String[]{"SOO","OOO","OOO"},new String[]{"E 2","S 2","W 1"})).isEqualTo(new int[]{2,1});
 	}
+
+	@Test
+	public void solution1_test() {
+		assertThat(ProgrammersLv1Controller.solution1(new String[]{"2", "3", "+", "D", "0", "3", "R"})).isEqualTo(20);
+	}
+
+	@Test
+	public void solution2_test() {
+		assertThat(ProgrammersLv1Controller.solution2(new int[] {1, 3, 4, 6} , new int[] {2, 3, 4, 5})).isEqualTo(3);
+	}
+
+	@Test
+	public void solution3_test () {
+		assertThat(ProgrammersLv1Controller.solution3("bucketplace")).isEqualTo("cceeabklptu");
+	}
+
+	@Test
+	public void solution4_test() {
+		assertThat(ProgrammersLv1Controller.solution4("3*2-5*1")).isEqualTo(new int[]{-9, -9, -9, 1, 1});
+	}
+
+	@Test
+	public void solution5_test() {
+		assertThat(ProgrammersLv1Controller.solution5(new int[] { 9, 10, 6, 0, 4, 6, 10})).isEqualTo(3);
+		assertThat(ProgrammersLv1Controller.solution5(new int[] { 6, 10, 3, 9, 4, 10, 3, 9, 3, 10, 6})).isEqualTo(9);
+		assertThat(ProgrammersLv1Controller.solution5(new int[] { 5, 3, 1, 3, 6, 4})).isEqualTo(0);
+		assertThat(ProgrammersLv1Controller.solution5(new int[] { 10, 10, 3, 9, 4, 10, 3, 9, 3, 10, 9})).isEqualTo(11);
+
+	}
 }
