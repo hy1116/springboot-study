@@ -138,12 +138,6 @@ public class ProgrammersLv1ControllerTest {
 	}
 
 	@Test
-	public void solution_making_hamburger_test() {
-		assertThat(ProgrammersLv1Controller.solution_making_hamburger(new int[]{2, 1, 1, 2, 3, 1, 2, 3, 1})).isEqualTo(2);
-		assertThat(ProgrammersLv1Controller.solution_making_hamburger(new int[]{1, 3, 2, 1, 2, 1, 3, 1, 2})).isEqualTo(0);
-	}
-
-	@Test
 	public void solution_mbti_test() {
 		assertThat(ProgrammersLv1Controller.solution_mbti(new String[]{"AN", "CF", "MJ", "RT", "NA"},new int[]{5, 3, 2, 7, 5})).isEqualTo("TCMA");
 		assertThat(ProgrammersLv1Controller.solution_mbti(new String[]{"TR", "RT", "TR"},new int[]{7, 1, 3})).isEqualTo("RCJA");
@@ -166,11 +160,6 @@ public class ProgrammersLv1ControllerTest {
 	}
 
 	@Test
-	public void solution_walking_park_test() {
-		assertThat(ProgrammersLv1Controller.solution_walking_park(new String[]{"SOO","OOO","OOO"},new String[]{"E 2","S 2","W 1"})).isEqualTo(new int[]{2,1});
-	}
-
-	@Test
 	public void solution1_test() {
 		assertThat(ProgrammersLv1Controller.solution1(new String[]{"2", "3", "+", "D", "0", "3", "R"})).isEqualTo(20);
 	}
@@ -187,15 +176,146 @@ public class ProgrammersLv1ControllerTest {
 
 	@Test
 	public void solution4_test() {
-		assertThat(ProgrammersLv1Controller.solution4("3*2-5*1")).isEqualTo(new int[]{-9, -9, -9, 1, 1});
+		assertThat(ProgrammersLv1Controller.solution4_v2("3*2-5*1")).isEqualTo(new int[]{-9, -9, -9, 1, 1});
+		assertThat(ProgrammersLv1Controller.solution4_v2("7*2-3")).isEqualTo(new int[]{-7,11});
+		//assertThat(ProgrammersLv1Controller.solution4_v2("1*1*1*1*1")).isEqualTo(new int[]{1});
 	}
 
 	@Test
 	public void solution5_test() {
-		assertThat(ProgrammersLv1Controller.solution5(new int[] { 9, 10, 6, 0, 4, 6, 10})).isEqualTo(3);
-		assertThat(ProgrammersLv1Controller.solution5(new int[] { 6, 10, 3, 9, 4, 10, 3, 9, 3, 10, 6})).isEqualTo(9);
-		assertThat(ProgrammersLv1Controller.solution5(new int[] { 5, 3, 1, 3, 6, 4})).isEqualTo(0);
-		assertThat(ProgrammersLv1Controller.solution5(new int[] { 10, 10, 3, 9, 4, 10, 3, 9, 3, 10, 9})).isEqualTo(11);
+		assertThat(ProgrammersLv1Controller.solution5_v2(new int[] { 9, 10, 6, 0, 4, 6, 10})).isEqualTo(3);
+		assertThat(ProgrammersLv1Controller.solution5_v2(new int[] { 5, 3, 1, 3, 6, 4})).isEqualTo(0);
+		assertThat(ProgrammersLv1Controller.solution5_v2(new int[] { 10, 10, 3, 9, 4, 10, 3, 9, 3, 10, 9})).isEqualTo(11);
+		assertThat(ProgrammersLv1Controller.solution5_v2(new int[] { 6, 10, 3, 9, 4, 10, 3, 9, 3, 10, 6})).isEqualTo(9);
+		assertThat(ProgrammersLv1Controller.solution5_v2(new int[] { 7,7,7,9,9,9})).isEqualTo(5);
+		assertThat(ProgrammersLv1Controller.solution5_v2(new int[] { 7,7,7,7,7,9,9,9})).isEqualTo(5);
+		assertThat(ProgrammersLv1Controller.solution5_v2(new int[] { 7,7,12,12,7,1,1,1})).isEqualTo(3);
+	}
 
+	@Test
+	public void solution_making_hamburger_test() {
+		assertThat(ProgrammersLv1Controller.solution_making_hamburger_stack(new int[]{2, 1, 1, 2, 3, 1, 2, 3, 1})).isEqualTo(2);
+		assertThat(ProgrammersLv1Controller.solution_making_hamburger_stack(new int[]{1, 3, 2, 1, 2, 1, 3, 1, 2})).isEqualTo(0);
+		assertThat(ProgrammersLv1Controller.solution_making_hamburger_stack(new int[]{1,1,2,3,1,2,3,1,2,3,1,1})).isEqualTo(2);
+		assertThat(ProgrammersLv1Controller.solution_making_hamburger_stack(new int[]{1,2,3,1,2,3,1,1})).isEqualTo(1);
+		assertThat(ProgrammersLv1Controller.solution_making_hamburger_stack(new int[]{1,2,3,1,2,3,1,2,3,1,2,3,1,2,3,1,2,3,1})).isEqualTo(3);
+	}
+
+	@Test
+	public void solution_mini_subString_test() {
+		assertThat(ProgrammersLv1Controller.solution_mini_subString("3141592","271")).isEqualTo(2);
+		assertThat(ProgrammersLv1Controller.solution_mini_subString("33333333333333333","3141592")).isEqualTo(0);
+		assertThat(ProgrammersLv1Controller.solution_mini_subString("333333333333333333","333333333333333333")).isEqualTo(0);
+	}
+
+	@Test
+	public void solution_near_string_test() {
+		assertThat(ProgrammersLv1Controller.solution_near_string("banana")).isEqualTo(new int[]{-1, -1, -1, 2, 2, 2});
+	}
+
+	@Test
+	public void solution_food_fight_test() {
+		assertThat(ProgrammersLv1Controller.solution_food_fight(new int[]{1,3,4,6})).isEqualTo("1223330333221");
+	}
+
+	@Test
+	public void solution_hall_of_fame_test() {
+		assertThat(ProgrammersLv1Controller.solution_hall_of_fame(3,new int[]{10, 100, 20, 150, 1, 100, 200})).isEqualTo(new int[]{10, 10, 10, 20, 20, 100, 100});
+	}
+
+	@Test
+	public void solution_fruit_seller_test() {
+		assertThat(ProgrammersLv1Controller.solution_fruit_seller(4,3,new int[]{4, 1, 2, 2, 4, 4, 4, 4, 1, 2, 4, 2})).isEqualTo(33);
+		assertThat(ProgrammersLv1Controller.solution_fruit_seller(3,4,new int[]{1, 2, 3, 1, 2, 3, 1})).isEqualTo(8);
+	}
+
+	@Test
+	public void solution_trump_bundle_test() {
+		assertThat(ProgrammersLv1Controller.solution_trump_bundle(
+				new String[]{"i", "drink", "water"}
+				,new String[]{"want", "to"}
+				,new String[]{"i", "want", "to", "drink", "water"}
+		)).isEqualTo("Yes");
+	}
+
+	@Test
+	public void solution_split_string_test() {
+		assertThat(ProgrammersLv1Controller.solution_split_string(
+				"banana"
+		)).isEqualTo(3);
+	}
+
+	@Test
+	public void solution_babbling_test() {
+		assertThat(ProgrammersLv1Controller.solution_babbling(
+				new String[]{"aya", "yee", "u", "maa"}
+		)).isEqualTo(1);
+		assertThat(ProgrammersLv1Controller.solution_babbling(
+				new String[]{"ayaye", "uuu", "yeye", "yemawoo", "ayaayaa"}
+		)).isEqualTo(2);
+		assertThat(ProgrammersLv1Controller.solution_babbling(
+				new String[]{"ayaaya", "yewoomaaya","aya", "ye", "woo", "maya"}
+		)).isEqualTo(4);
+	}
+
+	@Test
+	public void solution_painting_test() {
+		assertThat(ProgrammersLv1Controller.solution_painting(
+				8,4,new int[]{2,3,6} //3.6666666...
+		)).isEqualTo(2);
+	}
+
+	@Test
+	public void solution_memory_score_test() {
+		assertThat(ProgrammersLv1Controller.solution_memory_score(
+				new String[]{"may", "kein", "kain", "radi"}
+				,new int[]{5, 10, 1, 3}
+				,new String[][]{{"may", "kein", "kain", "radi"},{"may", "kein", "brin", "deny"},{"kon", "kain", "may", "coni"}}
+		)).isEqualTo(new int[]{19, 15, 6});
+	}
+
+	@Test
+	public void solution_orders_weapon_test() {
+		assertThat(ProgrammersLv1Controller.solution_orders_weapon(5,3,2)).isEqualTo(10);
+	}
+
+	@Test
+	public void solution_secret_code_test() {
+		assertThat(ProgrammersLv1Controller.solution_secret_code("aukks","wbqd",5)).isEqualTo("happy");
+		assertThat(ProgrammersLv1Controller.solution_secret_code("aaaaaaa","wbqd",5)).isEqualTo("hhhhhhh");
+		assertThat(ProgrammersLv1Controller.solution_secret_code("wxyz","abcd",8)).isEqualTo("ijkl");
+	}
+
+	@Test
+	public void solution_roughly_made_keyboard_test() {
+		assertThat(ProgrammersLv1Controller.solution_roughly_made_keyboard(new String[]{"ABACD", "BCEFD"},new String[]{"ABCD","AABB"})).isEqualTo(new int[]{9,4});
+	}
+
+	@Test
+	public void solution_running_race_test() {
+		assertThat(ProgrammersLv1Controller.solution_running_race(new String[]{"mumu", "soe", "poe", "kai", "mine"},new String[]{"kai", "kai", "kai"})).isEqualTo(new String[]{"kai","mumu", "soe", "poe",  "mine"});
+		assertThat(ProgrammersLv1Controller.solution_running_race(new String[]{"mumu", "soe", "poe", "kai", "mine"},new String[]{"kai", "kai", "mine", "mine"})).isEqualTo(new String[]{"mumu", "kai", "mine", "soe", "poe"});
+		assertThat(ProgrammersLv1Controller.solution_running_race(new String[]{"mumu", "soe", "poe", "kai", "mine"},new String[]{"kai", "kai", "mine", "mine", "mine"})).isEqualTo(new String[]{"mumu","mine", "kai", "soe", "poe"});
+		assertThat(ProgrammersLv1Controller.solution_running_race(new String[]{"mumu", "soe", "poe", "kai", "mine"},new String[]{"kai", "kai", "mine", "mine", "soe"})).isEqualTo(new String[]{"mumu", "kai", "soe", "mine", "poe"});
+		/*assertThat(ProgrammersLv1Controller.solution_running_race(new String[]{"mumu", "soe", "poe", "kai", "mine"}
+				,new String[]{"mumu", "soe", "poe", "kai", "mine"
+						,"mumu", "soe", "poe", "kai", "mine"
+						,"mumu", "soe", "poe", "kai", "mine"
+						,"mumu", "soe", "poe", "kai", "mine"
+						,"mumu", "soe", "poe", "kai", "mine"
+						,"mumu", "soe", "poe", "kai", "mine"}
+		)).isEqualTo(new String[]{"mumu", "soe", "poe", "kai", "mine"});*/
+	}
+
+	@Test
+	public void solution_cleaning_background_test() {
+		assertThat(ProgrammersLv1Controller.solution_cleaning_background(
+				new String[]{".#...", "..#..", "...#."}
+		)).isEqualTo(new int[]{0, 1, 3, 4});
+	}
+
+	@Test
+	public void solution_walking_park_test() {
+		assertThat(ProgrammersLv1Controller.solution_walking_park(new String[]{"SOO","OOO","OOO"},new String[]{"E 2","S 2","W 1"})).isEqualTo(new int[]{2,1});
 	}
 }

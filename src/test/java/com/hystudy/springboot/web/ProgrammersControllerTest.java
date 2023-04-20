@@ -444,5 +444,8 @@ public class ProgrammersControllerTest {
 		assertThat(ProgrammersController.solution_mineral2(new int[]{0, 1, 1},new String[]{"diamond", "diamond", "diamond", "diamond", "diamond", "iron", "iron", "iron", "iron", "iron", "diamond"})).isEqualTo(50);
 	}
 
-
+	@Test
+	public void skill3_test(){
+		assertThat(ProgrammersController.skill3(new int[]{14, 6, 5, 11, 3, 9, 2, 10})).isEqualTo(36);
+	}
 }

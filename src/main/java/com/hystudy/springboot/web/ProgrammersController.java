@@ -1,5 +1,7 @@
 package com.hystudy.springboot.web;
 
+import org.springframework.security.core.parameters.P;
+
 import java.util.*;
 import java.util.stream.*;
 import java.util.function.Function;
@@ -1452,5 +1454,31 @@ public class ProgrammersController {
 			}
 			System.out.println();
 		}
+	}
+
+	public static int skill3(int sticker[]){
+		int answer = 0;
+		Queue<Integer> queue = Arrays.stream(sticker).boxed().collect(Collectors.toCollection(PriorityQueue::new));
+		List<Integer> list = Arrays.stream(sticker).boxed().collect(Collectors.toList());
+		while(!queue.isEmpty()){
+			int max = queue.poll();
+			if(0 < list.indexOf(max)){
+				answer += max;
+
+				int idx = list.indexOf(max);
+				list.remove(list.get(idx));
+				if(idx < list.size()-1){
+					list.remove(idx+1);
+				}else{
+					list.remove(list.size()-1);
+				}
+				if(1 < idx){
+					list.remove(idx-1);
+				}else{
+					list.remove(0);
+				}
+			}
+		}
+		return answer;
 	}
 }

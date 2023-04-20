@@ -1,10 +1,10 @@
 package com.hystudy.springboot.web;
 
-import java.math.BigInteger;
-import java.sql.Array;
+import org.springframework.security.core.parameters.P;
+
 import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.function.BinaryOperator;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -129,12 +129,11 @@ public class ProgrammersLv1Controller {
 
 	// LV.1 [1차] 다트게임
 	enum sdt {S, D, T}
-
 	public static int solution_DartGame(String dartResult) {
 		String[] oparr = dartResult.split("[0-9]+");
 		String[] numarr = dartResult.split("([SDT])([*#])?");
 
-		int answer = 0, firstscore = 0, prevscore = 0, starcnt = 0;
+		int answer = 0, firstscore = 0, prevscore = 0;
 		for (int i = 0; i < 3; i++) {
 			int nowscore = (int) Math.pow(Integer.parseInt(numarr[i]), sdt.valueOf(String.valueOf(oparr[i + 1].charAt(0))).ordinal() + 1);
 			if (i == 0) firstscore = nowscore;
@@ -142,7 +141,6 @@ public class ProgrammersLv1Controller {
 				if ('*' == oparr[i + 1].charAt(1)) { // 스타상 : 해당값과 이전 값 두배 (중첩가능)
 					nowscore *= 2;
 					nowscore += prevscore;
-					starcnt++;
 					if (i > 1 && oparr[i].length() > 1 && '*' == oparr[i].charAt(1)) {
 						nowscore -= firstscore;
 						if (oparr[i - 1].length() > 1 && '*' == oparr[i + 1].charAt(1)) {
@@ -181,7 +179,6 @@ public class ProgrammersLv1Controller {
 			answer += ++min;
 		}
 		return answer;
-		//return (long)IntStream.rangeClosed(Math.min(a,b),Math.max(a,b)).sum();
 	}
 
 	// LV1. 수박수박수박수..
@@ -569,92 +566,6 @@ public class ProgrammersLv1Controller {
 		return answer;
 	}
 
-	// LV1. 공원 산책
-	public static int[] solution_walking_park(String[] park, String[] routes) {
-		int[] answer = {};
-
-		Arrays.stream(park).map(r-> Arrays.stream(r.split("")).collect(Collectors.toList()));
-
-
-		System.out.println();
-
-		return answer;
-	}
-
-
-	public static int solution_making_hamburger(int[] ingredient) {
-/*
-		List<Integer> list = Arrays.stream(ingredient).boxed().collect(Collectors.toList());
-		list = list.subList(list.indexOf(1),list.lastIndexOf(1)+1);
-
-		int answer =0,i = 0,idx = -1,bottom = 0;
-
-		int[] pack = {1,2,3,1};
-		while(idx++ < list.size()-1){
-			if(i==pack.length-1 && list.get(idx) == pack[i]){ // 포장
-				answer++;
-				for (int j=0;j<idx-bottom;j++){
-					list.remove(j);
-				}
-				idx=-1;
-				i=0;
-			} else if(list.get(idx) == pack[i]){ // 필요한 재료인 경우
-				i++;
-			} else if(i!=0 && list.get(idx) == 1){ // 빵이 끼어든 경우
-				bottom = idx;
-				i=1;
-			}
-		}
-
- */
-		/*
-		int answer =0;
-		List<Integer> list = Arrays.stream(ingredient).boxed().collect(Collectors.toList());
-		list = list.subList(list.indexOf(1),list.lastIndexOf(1)+1);
-
-		int[] pack = {1,2,3,1};
-		int packPoint = 0;
-		Stack<Integer> st = new Stack<>();
-		for(int i=0;i<list.size()-1;i++){
-			if(pack[packPoint]==list.get(i)){
-				if(++packPoint >= pack.length){
-					answer++;
-					System.out.println("answer");
-					while (!st.empty()){
-						System.out.println("pop");
-						if(st.pop() == 1) break;
-					}
-					i=0;
-					packPoint = 0;
-				}
-			} else if(list.get(i)==1){
-				packPoint = 1;
-			}
-			st.push(list.get(i));
-		}
-
-		 */
-		int answer = 0;
-		List<Integer> Onelist = new ArrayList<>();
-		for(int i=0;i<ingredient.length;i++){
-			if(ingredient[i]==1) Onelist.add(i);
-		}
-		System.out.println(Onelist.size());
-		for(int i=1;i<Onelist.size()-1;i++){
-			System.out.println("list.get(i-1) : "+Onelist.get(i-1)+" | list.get(i) : "+Onelist.get(i));
-			List<Integer> tmplist = Onelist.subList(Onelist.get(i-1),Onelist.get(i));
-
-			if(tmplist.contains(2) && tmplist.contains(3) && tmplist.indexOf(2) < tmplist.lastIndexOf(3)){
-				answer++;
-				i=0;
-				for(int j = i-1;j<i;j++){
-					ingredient[j] = 0;
-				}
-			}
-		}
-		return answer;
-	}
-	
 	public static int solution1(String[] strarr){
 		for(int i=0;i<strarr.length;i++){
 			if("+".equals(strarr[i])) strarr[i] = String.valueOf(Integer.valueOf(strarr[i-1])+Integer.valueOf(strarr[i-2]));
@@ -676,148 +587,388 @@ public class ProgrammersLv1Controller {
 				.map(r->r.getKey().repeat(r.getValue().intValue())).collect(Collectors.joining());
 	}
 
-	/*
-	static HashSet<String> rs;
-	static String[] oparr,numarr,orgnumarr,resultarr;
-	static boolean[] visitarr;
-	public static int[] solution4(String str){
-		int[] intarr = null;
-		numarr = str.split("[-*+]");
-		orgnumarr = str.split("[-*+]");
-		oparr = str.split("[0-9]");
-		resultarr = new String[oparr.length-1];
-		visitarr = new boolean[oparr.length-1];
-		Arrays.fill(visitarr,false);
-		rs = new HashSet<>();
+	static String[] opArr, numArr;
+	static String[] caseArr;
+	static List<String> caseList;
+	public static int[] solution4_v2(String str){
+		numArr = str.split("[-*+]");
+		opArr = str.split("[0-9]");
+
+		// 경우의 수 List 만들기(순열)
+		caseArr = new String[opArr.length-1];
+		caseList = new ArrayList<>();
 		getPermutations(0,0);
 
-		return intarr;
-	}
-	public static void getPermutations(int digit, int flag){
-		if(digit == oparr.length-1){
-			System.out.println(Arrays.stream(resultarr).filter(Objects::nonNull).collect(Collectors.joining()));
-			//rs.add(s);
-			//resultarr = new String[oparr.length-1];
-
-			return;
-		}
-		for (int i=1;i<oparr.length;i++){
-			String left = numarr[i-1],right = numarr[i];
-			if((flag &  1<<i) != 0) continue;
-
-			if(i > 1 && resultarr[i-2]!=null){
-				left = resultarr[i-2];
-				resultarr[i-2] = null;
-			}
-			if(i < oparr.length-1 && resultarr[i]!=null){
-				right = resultarr[i];
-				resultarr[i] = null;
-			}
-			System.out.println("left : "+left+" | right : "+right);
-			resultarr[i-1] = "(" +left +oparr[i] +right +")";
-			getPermutations(digit+1,flag | 1 << i);
-			resultarr[i-1] = null;
-		}
-		System.out.println("digit : "+digit+" | flag : "+Integer.toBinaryString( flag));
-	}
-	*/
-
-	static HashSet<String> rs;
-	static String[] oparr,numarr,resultarr;
-	static Boolean[] visitarr;
-	static Stack<Integer> st;
-	public static int[] solution4(String str){
-		int[] intarr = null;
-		numarr = str.split("[-*+]");
-		oparr = str.split("[0-9]");
-		resultarr = new String[oparr.length-1];
-		visitarr = new Boolean[oparr.length-1];
-		Arrays.fill(visitarr,false);
-		rs = new HashSet<>();
-		st = new Stack();
-		getPermutations(0,0);
-		System.out.println("-------------------");
-		rs.forEach(System.out::println);
-		return intarr;
-	}
-	/*
-	public static void getPermutations(int digit, int flag){
-		if(digit == oparr.length-1){
-			String result = "";
-			result = Arrays.stream(resultarr).filter(Objects::nonNull).collect(Collectors.joining());
-			//System.out.println(Arrays.toString(visitarr));
-			//System.out.println(Arrays.toString(resultarr));
-			for(int i=0;i< oparr.length-1;i++){
-				if(!visitarr[i]){
-					if(0 < i && i < oparr.length-2) result = "("+resultarr[i-1]+oparr[i+1]+resultarr[i+1]+")";
-					else if(i==0) result = "("+numarr[i]+oparr[i+1]+resultarr[i+1]+")";
-					else if(i==oparr.length-2) result = "("+resultarr[i-2]+oparr[i+1]+numarr[i+1]+")";
+		Map<String,Integer> map = new HashMap<>();
+		for(String s : caseList){
+			int[] calcArr = new int[opArr.length-1];
+			String[] formulaArr = new String[opArr.length-1];
+			int lastIdx = 0;
+			for(String c : s.split("")){
+				int idx = Integer.valueOf(c);
+				boolean leftFlag = false,rightFlag = false;
+				if( 0 < idx && formulaArr[idx-1]!=null) leftFlag = true;
+				if( idx+1 < opArr.length-1 && formulaArr[idx+1]!=null) rightFlag = true;
+				formulaArr[idx] = "("
+						+ (leftFlag?formulaArr[idx-1]: numArr[idx])
+						+ opArr[idx+1]
+						+ (rightFlag?formulaArr[idx+1]: numArr[idx+1])
+						+")";
+				calcArr[idx] = calc(
+						leftFlag? calcArr[idx-1]:Integer.valueOf(numArr[idx])
+						, rightFlag? calcArr[idx+1]:Integer.valueOf(numArr[idx+1])
+						, opArr[idx+1]
+				);
+				if (leftFlag){
+					formulaArr[idx-1] = formulaArr[idx];
+					calcArr[idx-1] = calcArr[idx];
 				}
+				if (rightFlag){
+					formulaArr[idx+1] = formulaArr[idx];
+					calcArr[idx+1] = calcArr[idx];
+				}
+				lastIdx = idx;
 			}
-			st.forEach(System.out::println);
-			rs.add(result);
-			Arrays.fill(visitarr,false);
-			return;
+			map.put(formulaArr[lastIdx],calcArr[lastIdx]);
 		}
-		for (int i=0;i<oparr.length-1;i++){
-			String left = numarr[i],right = numarr[i+1];
-			if((flag &  1<<i) != 0) continue;
-
-			if(i > 0 && resultarr[i-1]!=null){
-				left = resultarr[i-1];
-				resultarr[i-1] = null;
-			}
-			if(i+1 < oparr.length-1 && resultarr[i+1]!=null){
-				right = resultarr[i+1];
-				resultarr[i+1] = null;
-			}
-			System.out.println("left : "+left+ " | right : "+right+"| digit :"+digit) ;
-			resultarr[i] = "(" +left +oparr[i+1] +right +")";
-			st.push("(" +left +oparr[i+1] +right +")");
-			visitarr[i] = true;
-			getPermutations(digit+1,flag | 1 << i);
-			resultarr[i] = null;
-			visitarr[i] = false;
-		}
+		map.entrySet().forEach(m-> System.out.println(m.getKey()+" = "+m.getValue()));
+		return map.entrySet().stream().sorted(Map.Entry.comparingByValue()).mapToInt(Map.Entry::getValue).toArray();
 	}
-	*/
-
 	public static void getPermutations(int digit, int flag){
-		if(digit == oparr.length-1){
-			String result = "";
-			while(!st.empty()){
-				result += String.valueOf(st.pop());
-			}
-			st.clear();
-			rs.add("result : "+result);
+		if(digit == opArr.length-1){
+			caseList.add(Arrays.stream(caseArr).collect(Collectors.joining()));
 			return;
 		}
-		for (int i=0;i<oparr.length-1;i++){
+		for (int i = 0; i< opArr.length-1; i++){
 			if((flag & 1<<i) != 0) continue;
-			st.push(i);
+			caseArr[digit] = String.valueOf(i);
 			getPermutations(digit+1,flag | 1 << i);
-			resultarr[i] = null;
 		}
 	}
-	public static int solution5(int[] intarr){
-		int answer = 0,liz = 0, max = 0, happysum = 0,unhappysum = 0;
-		for(int i : intarr){
-			if(8 < i){
-				liz++;
-				max++;
-				if(0 < liz) happysum++;
-			} else{
-				if(0 < liz--){
-					max++;
-					unhappysum++;
-				}
-				else max = 0;
-				liz = 0;
+	public static int calc(int num1,int num2, String op){
+		int n1 = Integer.valueOf(num1), n2 = Integer.valueOf(num2);
+		if("*".equals(op)) return n1 * n2;
+		else if("+".equals(op)) return n1 + n2;
+		else if("-".equals(op)) return n1 - n2;
+		else return 0;
+	}
+
+	public static int solution5_v2(int[] intarr){
+		long totalHappy = Arrays.stream(intarr).filter(a->8<a).count();
+		if(intarr.length == totalHappy*2) return intarr.length-1;
+		if(intarr.length < totalHappy*2) return intarr.length;
+
+		Queue<Boolean> queue = new LinkedList<>();
+		int max = 0;
+		for(int i=0;i<intarr.length;i++){
+			queue.add(8<intarr[i]);
+			long happy = queue.stream().filter(Boolean::booleanValue).count();
+			if (happy*2 == queue.size()) continue;
+			while(!queue.isEmpty() && happy <= queue.size()/2){
+				if(queue.poll()) happy--;
+			}
+			if(max < queue.size()) max = queue.size();
+		}
+		// 뒤집어서 한번 더
+		queue.clear();
+		int reverseMax = 0;
+		for(int i=intarr.length-1;0<=i;i--){
+			queue.add(8<intarr[i]);
+			long happy = queue.stream().filter(Boolean::booleanValue).count();
+			if (happy*2 == queue.size()) continue;
+			while(!queue.isEmpty() && happy <= queue.size()/2){
+				if(queue.poll()) happy--;
+			}
+			if(reverseMax < queue.size()) reverseMax = queue.size();
+		}
+
+		return Math.max(reverseMax,max);
+	}
+
+	// LV1. 햄버거 만들기
+	public static int solution_making_hamburger_stack(int[] ingredient) {
+		int answer = 0,point = 0;
+		int[] order = {1,2,3,1};
+		Stack<Integer> st = new Stack<>();
+		for (int i = 0;i<ingredient.length;i++){
+			if(ingredient[i]==1 && point != order.length-1) st.push(point=1);
+			else if(ingredient[i]==order[point]) st.push(++point);
+			else{
+				point=0;
+				st.clear();
 			}
 
-			if(answer < max) answer = max;
+			if(order.length-1 < point){
+				answer++;
+				while(!st.empty() && st.pop() != 1);
+				point = (st.empty())? 0 : st.peek();
+			}
 		}
-		if(0 < answer && unhappysum - happysum >= 0) answer -= (unhappysum - happysum + 1);
 		return answer;
 	}
+
+	// LV2. 가장 작은 문자열
+	public static int solution_mini_subString(String t, String p) {
+		return (int) IntStream.rangeClosed(0,t.length()-p.length())
+				.mapToLong(a->Long.valueOf(t.substring(a,a+p.length())))
+				.filter(r->r<=Long.valueOf(p))
+				.count();
+	}
+
+	// LV1. 가장 가까운 문자열
+	public static int[] solution_near_string(String s) {
+		return IntStream.range(0,s.length())
+				.map(i->{
+					int position = s.substring(0,i).lastIndexOf(s.charAt(i));
+					if(-1 < position) position = i-position;
+					return position;
+				})
+				.toArray();
+	}
+
+	// LV1. 푸드 파이트 대회
+	public static String solution_food_fight(int[] food) {
+		StringBuilder sb = new StringBuilder().append(0);
+		IntStream.iterate(food.length-1,i->i-1).limit(food.length-1)
+			.forEach(m->{
+				sb.append(String.valueOf(m).repeat((int)Math.ceil(food[m]/2)));
+				sb.insert(0,String.valueOf(m).repeat((int)Math.ceil(food[m]/2)));
+			});
+		return sb.toString();
+	}
+
+	// LV1. 과일 장수
+	public static int solution_fruit_seller(int k, int m, int[] score) {
+		List<Integer> list = Arrays.stream(score).boxed()
+				.sorted(Comparator.reverseOrder())
+				.collect(Collectors.toList());
+
+		return IntStream.range(0,score.length/m)
+				.map(i->list.get(m*(i+1)-1)*m)
+				.sum();
+	}
+
+	// LV1. 명예의 전당
+	public static int[] solution_hall_of_fame(int k, int[] score) {
+		int[] answer = new int[score.length];
+
+		PriorityQueue<Integer> queue = new PriorityQueue<>();
+		for (int i=0;i<score.length;i++){
+			queue.add(score[i]);
+			if(k <= i) queue.poll();
+			answer[i] = queue.peek();
+		}
+
+		return answer;
+	}
+
+	// LV1. 카드뭉치
+	public static String solution_trump_bundle(String[] cards1, String[] cards2, String[] goal) {
+		Queue<String> queue1 = Arrays.stream(cards1).collect(Collectors.toCollection(LinkedList::new));
+		Queue<String> queue2 = Arrays.stream(cards2).collect(Collectors.toCollection(LinkedList::new));
+
+		for(String s : goal){
+			if(!queue1.isEmpty() && queue1.peek().equals(s)) queue1.poll();
+			else if(!queue2.isEmpty() && queue2.peek().equals(s)) queue2.poll();
+			else return "No";
+		}
+
+		return "Yes";
+	}
+
+	// LV1. 문자열 나누기
+	public static int solution_split_string(String s) {
+		int answer = 0;
+		String x = "";
+		int matchCnt = 0;
+		for(String str : s.split("")){
+			if("".equals(x)){
+				x = str;
+				matchCnt = 1;
+			} else if(x.equals(str)){
+				matchCnt++;
+			} else{
+				matchCnt--;
+			}
+
+			if(matchCnt==0){
+				answer++;
+				x="";
+			}
+		}
+		if(matchCnt!=0) answer++;
+		return answer;
+	}
+
+	// LV1. 옹알이(2)
+	public static int solution_babbling(String[] babbling) {
+		List<String> canList = Arrays.asList(new String[]{"aya", "ye", "woo", "ma"});
+		int answer = 0;
+
+		for (String s : babbling){
+			for(String canStr : canList){
+				if(s.contains(canStr)) {
+					if(s.contains(canStr.repeat(2))) continue;
+					s = s.replaceAll(canStr," ");
+				}
+				if("".equals(s.trim())){
+					answer++;
+					break;
+				}
+			}
+		}
+
+		return answer;
+	}
+
+	// LV1. 덧칠하기
+	public static int solution_painting(int n, int m, int[] section) {
+		List<Integer> list = Arrays.stream(section).boxed().collect(Collectors.toList());
+		int answer = 0;
+		while(!list.isEmpty()){
+			list.removeIf(a->list.get(0)<=a && a<=list.get(0)+m-1);
+			answer++;
+		}
+		return answer;
+	}
+
+	// LV1. 추억 점수
+	public static int[] solution_memory_score(String[] name, int[] yearning, String[][] photo) {
+		int[] answer = new int[photo.length-1];
+		List<String> nameList = Arrays.asList(name);
+		for (int i=0;i<photo[0].length-1;i++){
+			int miss = 0;
+			for(String s : photo[i]){
+				if(nameList.indexOf(s) < 0) continue;
+				miss += yearning[nameList.indexOf(s)];
+			}
+			answer[i] = miss;
+		}
+
+		return answer;
+	}
+
+	// LV1. 기사 단원의 무기
+	public static int solution_orders_weapon(int number, int limit, int power) {
+		return (int)IntStream.rangeClosed(1,number).mapToLong(i->{
+			long cnt = IntStream.rangeClosed(1,(int) Math.sqrt(i)).filter(a->i%a==0).map(m->m*m==i?1:2).distinct().sum();
+			if(limit < cnt) cnt = power;
+			return cnt;
+		}).sum();
+	}
+
+	// LV1. 둘만의 암호
+	public static String solution_secret_code(String s, String skip, int index) {
+		StringBuffer sb = new StringBuffer();
+		for(String str : s.split("")){
+			char c = str.charAt(0);
+			int cnt = 0;
+			while(cnt < index){
+				if('z' < ++c) c -= 'z'-'a'+1;
+				if(skip.contains(String.valueOf(c))){
+					continue;
+				}
+				cnt++;
+			}
+			sb.append(c);
+		}
+		return sb.toString();
+	}
+
+	// LV1. 대충만든 자판
+	public static int[] solution_roughly_made_keyboard(String[] keymap, String[] targets) {
+		int[] answer = new int[targets.length];
+		String str = Arrays.stream(keymap).collect(Collectors.joining());
+		for(int i=0;i<targets.length;i++){
+			for (int j=0;j<targets[i].length();j++){
+				if(str.indexOf(targets[i].charAt(j)) < 0){
+					answer[i] = -1;
+					break;
+				}
+
+				int minidx = 100;
+				for(String s : keymap){
+					if(-1 < s.indexOf(targets[i].charAt(j)) && s.indexOf(targets[i].charAt(j)) <= minidx){
+						minidx = s.indexOf(targets[i].charAt(j));
+					}
+				}
+				answer[i] += minidx+1;
+			}
+		}
+		return answer;
+	}
+
+	// LV1. 달리기 경주
+	public static String[] solution_running_race(String[] players, String[] callings) {
+		/*
+		List<String> playerList = Arrays.stream(players).collect(Collectors.toList());
+		for (int i=0;i<callings.length;i++){
+			int callIdx = playerList.indexOf(callings[i]);
+			if(callIdx == 0) continue;
+			String temp = playerList.get(callIdx);
+			playerList.set(callIdx,playerList.get(callIdx-1));
+			playerList.set(callIdx-1,temp);
+		}
+		return playerList.toArray(String[]::new);
+		*/
+		/*
+		AtomicInteger i = new AtomicInteger(1);
+		Map<String,Integer> playerMap = Arrays.stream(players)
+				.collect(Collectors.toMap(Function.identity(),i.getAndAdd(callings.length+1)));
+		*/
+
+		System.out.println("----------------------------------");
+		Map<String,Integer> playerMap =
+				IntStream.range(0,players.length).boxed()
+				.collect(Collectors.toMap(m->players[m],Function.identity()));
+
+		for (String s: callings){
+			playerMap.put(s,playerMap.get(s)-(callings.length+1));
+			playerMap.entrySet().forEach(System.out::print);
+			System.out.println();
+		}
+
+		playerMap.entrySet().forEach(System.out::println);
+
+		return playerMap.entrySet().stream()
+				.sorted(Comparator.comparing(Map.Entry::getValue))
+				.map(Map.Entry::getKey).toArray(String[]::new);
+		/*
+		Map<String,Integer> playerMap = IntStream.range(0,players.length).boxed()
+				.collect(Collectors.toMap(i->players[i],Function.identity()));
+		AtomicInteger i = new AtomicInteger(1);
+
+		Map<String,AtomicInteger> playerMap = Arrays.stream(players).collect(Collectors.toMap(Function.identity(),i.incrementAndGet()));
+		for (int i=0;i<callings.length;i++){
+			int rank = playerMap.get(callings[i]);
+			playerMap.entrySet().stream().filter(p->p.getValue()==rank-1).findAny().get().setValue(rank);
+			playerMap.put(callings[i],rank-1);
+		}
+
+		return playerMap.entrySet().stream()
+				.sorted(Comparator.comparing(Map.Entry::getValue))
+				.map(Map.Entry::getKey).toArray(String[]::new);
+
+		 */
+	}
+
+	/******************************************************************************************************/
+	// LV1. 바탕화면 정리
+	public static int[] solution_cleaning_background(String[] wallpaper) {
+		int[] answer = {};
+		return answer;
+	}
+
+	// LV1. 공원 산책
+	public static int[] solution_walking_park(String[] park, String[] routes) {
+		int[] answer = {};
+
+		Arrays.stream(park).map(r-> Arrays.stream(r.split("")).collect(Collectors.toList()));
+
+
+		System.out.println();
+
+		return answer;
+	}
+
 }
